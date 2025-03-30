@@ -19,13 +19,20 @@ function Login() {
   
   
     const {register:login,handleSubmit,formState:{errors},reset} = useForm<LoginForm>({
-      resolver: zodResolver(validationSchema)
+      resolver: zodResolver(validationSchema),
+      defaultValues: {
+        email: "",
+        password: ""
+      }
     })
   
     const onSubmit = (values:LoginForm) =>{
       console.log('成功的console',values)
       console.log('發送API，並重置表單')
-      reset()
+      reset({
+        email: "",
+        password: ""
+      })
     }
   
     console.log('errors',errors)

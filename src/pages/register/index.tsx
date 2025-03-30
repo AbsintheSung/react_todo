@@ -26,13 +26,24 @@ const Register = () =>{
   })
 
   const {register,handleSubmit,formState:{errors},reset} = useForm<Form>({
-    resolver: zodResolver(validationSchema)
+    resolver: zodResolver(validationSchema),
+    defaultValues: {
+      email:"" ,
+      name: "",
+      password:"" ,
+      confirmPassword:"" 
+    }
   })
 
   const onSubmit = (values:Form) =>{
     console.log('成功的console',values)
     console.log('發送API，並重置表單')
-    reset()
+    reset({
+      email:"" ,
+      name: "",
+      password:"" ,
+      confirmPassword:"" 
+    })
   }
 
   console.log('errors',errors)
