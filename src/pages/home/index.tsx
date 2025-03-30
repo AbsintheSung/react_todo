@@ -2,7 +2,7 @@ import { Container } from "../../styles/container";
 import styled from "styled-components"
 import { useState,useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faCheck,faTrash,faPenToSquare,faXmark } from "@fortawesome/free-solid-svg-icons";
 
 const InputContent = styled.div`
   display: flex;
@@ -81,10 +81,11 @@ const TodoItem = styled.li`
       justify-content: center;
     }
   }
-  & >.todo-content{
+  /* & >.todo-content{
     flex: 1;
-  }
-  & > .todo-delbtn{
+  } */
+  
+  /* & > .todo-delbtn{
     background: none;
     padding: 0px;
     border: none;
@@ -96,8 +97,42 @@ const TodoItem = styled.li`
     &:hover {
       color: #ff0000;
     }
-  }
+  } */
   `
+const TodoText = styled.p<{ status: boolean }>`
+  flex: 1;
+  margin: 0;
+  text-decoration: ${(props) => (props.status ? "line-through" : "none")};
+  color: ${(props) => (props.status ? "#888" : "#333")};
+`
+const ButtonGroup = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 0px 12px;
+  & > button{
+    background: none;
+    padding: 0px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+   
+  }
+  & > .todo-delbtn,.todo-cancelbtn{
+    color: #ff5252;
+    &:hover {
+      color: #ff0000;
+    }
+  }
+  & > .todo-editbtn,.todo-savebtn{
+    color: #07a82f;
+    &:hover {
+      color: #3ae957;
+    }
+  }
+`
 
 type TodoItem = {
   content: string;
@@ -110,6 +145,8 @@ type FilterType = "all" | "active" | "completed"
 const Home = ()=>{
   const [todoItems,setTodoItems] = useState< TodoItem[] >([])
   const [filter, setFilter] = useState<FilterType>("all")
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editValue, setEditValue] = useState<string>("")
   const handleFilterChange = (value: FilterType) => {
     setFilter(value); 
   }
@@ -126,6 +163,28 @@ const Home = ()=>{
       return item;
     }));
   }
+  const handleDelTodoItem = (id: string) => {
+    setTodoItems(todoItems.filter((item) => item.id !==id));
+  }
+
+  const startEditing = (id: string, text: string) => {
+    setEditingId(id)
+    console.log(text)
+    setEditValue(text)
+  }
+  // 保存编辑
+  const saveEdit = () => {
+    if (editingId !== null && editValue.trim() !== "") {
+      setTodoItems(todoItems.map((item) => (item.id === editingId ? { ...item, content: editValue } : item)))
+      setEditingId(null)
+      setEditValue("")
+    }
+  }
+  // 取消编辑
+  const cancelEdit = () => {
+    setEditingId(null)
+    setEditValue("")
+  } 
   useEffect(() => {
     const responseData: TodoItem[] = [
       {
@@ -181,13 +240,52 @@ const Home = ()=>{
           </TodoItem> */}
           {filterTodoItems.map((item) => (
             <TodoItem key={item.id}>
-              <div className="todo-checkbox" onClick={() => handleCheckboxStatus(item.id)}>
-                <p>
-                  {item.status? <FontAwesomeIcon icon={faCheck} /> : ""}
-                </p>
-              </div>
-              <div className="todo-content">{item.content}</div>
-              <button className="todo-delbtn">刪除按鈕</button>
+              {editingId !== item.id && (
+                <div className="todo-checkbox" onClick={() => handleCheckboxStatus(item.id)}>
+                  <p>
+                    {item.status? <FontAwesomeIcon icon={faCheck} /> : ""}
+                  </p>
+                </div>
+              )}
+              {/* <div className="todo-content">{item.content}</div>
+              <button className="todo-delbtn" onClick={()=>handleDelTodoItem(item.id)}>
+                <FontAwesomeIcon icon={faTrash} />
+              </button> */}
+               {editingId === item.id ? (
+                <>
+                  <input
+                    value={editValue}
+                    onChange={(e) => setEditValue(e.target.value)}
+                    type="text"
+                  />
+                  <ButtonGroup>
+                    <button className="todo-savebtn" onClick={saveEdit}>
+                      <FontAwesomeIcon icon={faCheck} />
+                    </button>
+                    <button className="todo-cancelbtn" onClick={cancelEdit}>
+                      <FontAwesomeIcon icon={faXmark} />
+                    </button>
+                  </ButtonGroup>
+                </>
+                ) : (
+                <>
+                  {/* <div className="todo-content">{item.content}</div> */}
+                  <TodoText status={item.status}>{item.content}</TodoText>
+                  <ButtonGroup>
+                    {!item.status &&(
+                      <button className="todo-editbtn" onClick={() => startEditing(item.id, item.content)}>
+                        <FontAwesomeIcon icon={faPenToSquare} />
+                      </button>
+                    )}
+                     {/* <button className="todo-editbtn" onClick={() => startEditing(item.id, item.content)}>
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                    </button> */}
+                    <button className="todo-delbtn" onClick={()=>handleDelTodoItem(item.id)}>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button> 
+                  </ButtonGroup>
+                </>
+                )}
             </TodoItem>
           ))}
         </TodoContent>
