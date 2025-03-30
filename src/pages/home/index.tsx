@@ -1,6 +1,8 @@
 import { Container } from "../../styles/container";
 import styled from "styled-components"
-
+import { useState,useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck,faTrash,faPenToSquare,faXmark } from "@fortawesome/free-solid-svg-icons";
 
 const InputContent = styled.div`
   display: flex;
@@ -32,7 +34,7 @@ const FilterContent = styled.div`
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
-  & > .filter-Btn{
+  /* & > .filter-Btn{
     flex:1;
     padding: 8px 16px;
     border: none;
@@ -42,6 +44,18 @@ const FilterContent = styled.div`
       color: #FFD370;
       border-bottom: 1px solid #000000;
     }
+  } */
+`
+const FilterButton =  styled.button<{ $active: boolean }>`
+  flex:1;
+  padding: 8px 16px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  border-bottom: ${(props) => (props.$active ? " 1px solid #000000" : "transparent")};
+  &:hover {
+    color: #FFD370;
+    /* border-bottom: 1px solid #000000; */
   }
 `
 
@@ -67,10 +81,11 @@ const TodoItem = styled.li`
       justify-content: center;
     }
   }
-  & >.todo-content{
+  /* & >.todo-content{
     flex: 1;
-  }
-  & > .todo-delbtn{
+  } */
+  
+  /* & > .todo-delbtn{
     background: none;
     padding: 0px;
     border: none;
@@ -82,38 +97,229 @@ const TodoItem = styled.li`
     &:hover {
       color: #ff0000;
     }
-  }
+  } */
   `
+const TodoText = styled.p<{ $status: boolean }>`
+  flex: 1;
+  margin: 0;
+  text-decoration: ${(props) => (props.$status ? "line-through" : "none")};
+  color: ${(props) => (props.$status ? "#888" : "#333")};
+`
+const ButtonGroup = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 0px 12px;
+  & > button{
+    background: none;
+    padding: 0px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+   
+  }
+  & > .todo-delbtn,.todo-cancelbtn{
+    color: #ff5252;
+    &:hover {
+      color: #ff0000;
+    }
+  }
+  & > .todo-editbtn,.todo-savebtn{
+    color: #07a82f;
+    &:hover {
+      color: #3ae957;
+    }
+  }
+`
 
+type TodoItem = {
+  content: string;
+  createTime: number;
+  id: string;
+  status: boolean;
+}
+type FilterType = "all" | "active" | "completed"
 
 const Home = ()=>{
+  const [inputValue, setInputValue] = useState("")
+  const [todoItems,setTodoItems] = useState< TodoItem[] >([])
+  const [filter, setFilter] = useState<FilterType>("all")
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editValue, setEditValue] = useState<string>("")
+
+  // 篩選邏輯
+  const handleFilterChange = (value: FilterType) => {
+    setFilter(value); 
+  }
+
+  // 渲染原始資料，根據狀態跟新內容
+  const filterTodoItems = todoItems.filter((todo) => {
+    if (filter === "active") return !todo.status
+    if (filter === "completed") return todo.status
+    return true
+  })
+
+  // 完成/未完成 邏輯 
+  const handleCheckboxStatus = (id: string) => {
+    setTodoItems(todoItems.map((item) => {
+      if (item.id === id) {
+        return { ...item, status: !item.status };
+      }
+      return item;
+    }));
+  }
+
+  //添加新項目
+  const addTodoItem = () => {
+    const newTodo: TodoItem = {
+      content: inputValue,
+      createTime:  Date.now(),
+      id:  Date.now().toString(),
+      status: false,
+    }
+    setTodoItems([...todoItems, newTodo])
+    setInputValue("")
+  }
+
+  // 刪除項目
+  const handleDelTodoItem = (id: string) => {
+    setTodoItems(todoItems.filter((item) => item.id !==id));
+  }
+
+  // 編輯項目
+  const startEditing = (id: string, text: string) => {
+    setEditingId(id)
+    console.log(text)
+    setEditValue(text)
+  }
+
+  // 保存编辑
+  const saveEdit = () => {
+    if (editingId !== null && editValue.trim() !== "") {
+      setTodoItems(todoItems.map((item) => (item.id === editingId ? { ...item, content: editValue } : item)))
+      setEditingId(null)
+      setEditValue("")
+    }
+  }
+
+  // 取消编辑
+  const cancelEdit = () => {
+    setEditingId(null)
+    setEditValue("")
+  } 
+
+
+  useEffect(() => {
+    const responseData: TodoItem[] = [
+      {
+        content: "買晚餐",
+        createTime: 1743340055,
+        id: "-OMb9XcMmDop98NqTNjM",
+        status: false
+      },
+      {
+        content: "買早餐",
+        createTime: 1743340055,
+        id: "-OMb9XcMmDop98NqTNjk",
+        status: false
+      },
+      {
+        content: "買午餐",
+        createTime: 1743340055,
+        id: "-OMb9XcMmDop98NqTNj",
+        status: false
+      }
+    ];
+    setTodoItems(responseData);
+  }, []); 
+
+  // 監聽狀態
+  useEffect(() => {
+    console.log("todoItems 更新後:", todoItems);
+  }, [todoItems]); 
   return(
     <>
       <Container>
         <InputContent>
-          <input />
-          <button >+</button>
+          <input 
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+          />
+          <button onClick={addTodoItem}>+</button>
         </InputContent>
 
         <FilterContent>
-          <button className="filter-Btn" >
+          <FilterButton $active={filter === "all"} onClick={() => handleFilterChange("all")}>
             全部
-          </button>
-          <button className="filter-Btn">
+          </FilterButton>
+          <FilterButton $active={filter === "active"} onClick={() => handleFilterChange("active")}>
             未完成
-          </button>
-          <button className="filter-Btn">
+          </FilterButton>
+          <FilterButton $active={filter === "completed"} onClick={() => handleFilterChange("completed")}>
             已完成
-          </button>
+          </FilterButton>
         </FilterContent>
         <TodoContent>
-          <TodoItem>
+          {/* <TodoItem>
             <div className="todo-checkbox">
               <p></p>
             </div>
             <div className="todo-content">內容內容內容內容內容</div>
             <button className="todo-delbtn">刪除按鈕</button>
-          </TodoItem>
+          </TodoItem> */}
+          {filterTodoItems.map((item) => (
+            <TodoItem key={item.id}>
+              {editingId !== item.id && (
+                <div className="todo-checkbox" onClick={() => handleCheckboxStatus(item.id)}>
+                  <p>
+                    {item.status? <FontAwesomeIcon icon={faCheck} /> : ""}
+                  </p>
+                </div>
+              )}
+              {/* <div className="todo-content">{item.content}</div>
+              <button className="todo-delbtn" onClick={()=>handleDelTodoItem(item.id)}>
+                <FontAwesomeIcon icon={faTrash} />
+              </button> */}
+               {editingId === item.id ? (
+                <>
+                  <input
+                    value={editValue}
+                    onChange={(e) => setEditValue(e.target.value)}
+                    type="text"
+                  />
+                  <ButtonGroup>
+                    <button className="todo-savebtn" onClick={saveEdit}>
+                      <FontAwesomeIcon icon={faCheck} />
+                    </button>
+                    <button className="todo-cancelbtn" onClick={cancelEdit}>
+                      <FontAwesomeIcon icon={faXmark} />
+                    </button>
+                  </ButtonGroup>
+                </>
+                ) : (
+                <>
+                  {/* <div className="todo-content">{item.content}</div> */}
+                  <TodoText $status={item.status}>{item.content}</TodoText>
+                  <ButtonGroup>
+                    {!item.status &&(
+                      <button className="todo-editbtn" onClick={() => startEditing(item.id, item.content)}>
+                        <FontAwesomeIcon icon={faPenToSquare} />
+                      </button>
+                    )}
+                     {/* <button className="todo-editbtn" onClick={() => startEditing(item.id, item.content)}>
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                    </button> */}
+                    <button className="todo-delbtn" onClick={()=>handleDelTodoItem(item.id)}>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button> 
+                  </ButtonGroup>
+                </>
+                )}
+            </TodoItem>
+          ))}
         </TodoContent>
       </Container>
     </>
