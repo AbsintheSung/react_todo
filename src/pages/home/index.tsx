@@ -143,6 +143,7 @@ type TodoItem = {
 type FilterType = "all" | "active" | "completed"
 
 const Home = ()=>{
+  const [inputValue, setInputValue] = useState("")
   const [todoItems,setTodoItems] = useState< TodoItem[] >([])
   const [filter, setFilter] = useState<FilterType>("all")
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -163,6 +164,19 @@ const Home = ()=>{
       return item;
     }));
   }
+
+   // 添加新任务
+   const addTodoItem = () => {
+    const newTodo: TodoItem = {
+      content: inputValue,
+      createTime:  Date.now(),
+      id:  Date.now().toString(),
+      status: false,
+    }
+    setTodoItems([...todoItems, newTodo])
+    setInputValue("")
+  }
+
   const handleDelTodoItem = (id: string) => {
     setTodoItems(todoItems.filter((item) => item.id !==id));
   }
@@ -215,8 +229,12 @@ const Home = ()=>{
     <>
       <Container>
         <InputContent>
-          <input />
-          <button >+</button>
+          <input 
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+          />
+          <button onClick={addTodoItem}>+</button>
         </InputContent>
 
         <FilterContent>
