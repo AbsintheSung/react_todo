@@ -1,6 +1,8 @@
 import { Container } from "../../styles/container";
 import styled from "styled-components"
 import { useState,useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
 const InputContent = styled.div`
   display: flex;
@@ -116,6 +118,14 @@ const Home = ()=>{
     if (filter === "completed") return todo.status
     return true
   })
+  const handleCheckboxStatus = (id: string) => {
+    setTodoItems(todoItems.map((item) => {
+      if (item.id === id) {
+        return { ...item, status: !item.status };
+      }
+      return item;
+    }));
+  }
   useEffect(() => {
     const responseData: TodoItem[] = [
       {
@@ -171,8 +181,10 @@ const Home = ()=>{
           </TodoItem> */}
           {filterTodoItems.map((item) => (
             <TodoItem key={item.id}>
-              <div className="todo-checkbox">
-                <p></p>
+              <div className="todo-checkbox" onClick={() => handleCheckboxStatus(item.id)}>
+                <p>
+                  {item.status? <FontAwesomeIcon icon={faCheck} /> : ""}
+                </p>
               </div>
               <div className="todo-content">{item.content}</div>
               <button className="todo-delbtn">刪除按鈕</button>
