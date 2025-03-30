@@ -1,6 +1,6 @@
 import { Container } from "../../styles/container";
 import {RegisterContent,FormRegister} from '../../styles/register'
-
+import { Link } from "react-router-dom";
 const Register = () =>{
   return(
     <>
@@ -26,7 +26,7 @@ const Register = () =>{
           </div>
           <div>
             <button>註冊</button>
-            <a href="#">連結到登入</a>
+            <Link to="../login">連結到登入</Link>
           </div>
         </FormRegister>
       </RegisterContent>
