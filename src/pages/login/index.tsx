@@ -1,5 +1,6 @@
 import { Container } from "../../styles/container";
 import { LoginContent, FormLogin } from "../../styles/login";
+import { Link } from "react-router-dom";
 function Login() {
   return (
     <>
@@ -17,7 +18,7 @@ function Login() {
               </div>
               <div>
                 <button>登入</button>
-                <a href="#">連結到註冊</a>
+                <Link to="../register">連結到註冊</Link>
               </div>
             </FormLogin>
         </LoginContent>
