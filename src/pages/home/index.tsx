@@ -99,11 +99,11 @@ const TodoItem = styled.li`
     }
   } */
   `
-const TodoText = styled.p<{ status: boolean }>`
+const TodoText = styled.p<{ $status: boolean }>`
   flex: 1;
   margin: 0;
-  text-decoration: ${(props) => (props.status ? "line-through" : "none")};
-  color: ${(props) => (props.status ? "#888" : "#333")};
+  text-decoration: ${(props) => (props.$status ? "line-through" : "none")};
+  color: ${(props) => (props.$status ? "#888" : "#333")};
 `
 const ButtonGroup = styled.div`
   display: flex;
@@ -270,7 +270,7 @@ const Home = ()=>{
                 ) : (
                 <>
                   {/* <div className="todo-content">{item.content}</div> */}
-                  <TodoText status={item.status}>{item.content}</TodoText>
+                  <TodoText $status={item.status}>{item.content}</TodoText>
                   <ButtonGroup>
                     {!item.status &&(
                       <button className="todo-editbtn" onClick={() => startEditing(item.id, item.content)}>
