@@ -148,14 +148,20 @@ const Home = ()=>{
   const [filter, setFilter] = useState<FilterType>("all")
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editValue, setEditValue] = useState<string>("")
+
+  // 篩選邏輯
   const handleFilterChange = (value: FilterType) => {
     setFilter(value); 
   }
+
+  // 渲染原始資料，根據狀態跟新內容
   const filterTodoItems = todoItems.filter((todo) => {
     if (filter === "active") return !todo.status
     if (filter === "completed") return todo.status
     return true
   })
+
+  // 完成/未完成 邏輯 
   const handleCheckboxStatus = (id: string) => {
     setTodoItems(todoItems.map((item) => {
       if (item.id === id) {
@@ -165,8 +171,8 @@ const Home = ()=>{
     }));
   }
 
-   // 添加新任务
-   const addTodoItem = () => {
+  //添加新項目
+  const addTodoItem = () => {
     const newTodo: TodoItem = {
       content: inputValue,
       createTime:  Date.now(),
@@ -177,15 +183,18 @@ const Home = ()=>{
     setInputValue("")
   }
 
+  // 刪除項目
   const handleDelTodoItem = (id: string) => {
     setTodoItems(todoItems.filter((item) => item.id !==id));
   }
 
+  // 編輯項目
   const startEditing = (id: string, text: string) => {
     setEditingId(id)
     console.log(text)
     setEditValue(text)
   }
+
   // 保存编辑
   const saveEdit = () => {
     if (editingId !== null && editValue.trim() !== "") {
@@ -194,11 +203,14 @@ const Home = ()=>{
       setEditValue("")
     }
   }
+
   // 取消编辑
   const cancelEdit = () => {
     setEditingId(null)
     setEditValue("")
   } 
+
+
   useEffect(() => {
     const responseData: TodoItem[] = [
       {
@@ -222,6 +234,8 @@ const Home = ()=>{
     ];
     setTodoItems(responseData);
   }, []); 
+
+  // 監聽狀態
   useEffect(() => {
     console.log("todoItems 更新後:", todoItems);
   }, [todoItems]); 
