@@ -1,6 +1,6 @@
 import { Container } from "../../styles/container";
 import styled from "styled-components"
-
+import { useState,useEffect } from "react";
 
 const InputContent = styled.div`
   display: flex;
@@ -32,7 +32,7 @@ const FilterContent = styled.div`
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
-  & > .filter-Btn{
+  /* & > .filter-Btn{
     flex:1;
     padding: 8px 16px;
     border: none;
@@ -42,6 +42,18 @@ const FilterContent = styled.div`
       color: #FFD370;
       border-bottom: 1px solid #000000;
     }
+  } */
+`
+const FilterButton =  styled.button<{ $active: boolean }>`
+  flex:1;
+  padding: 8px 16px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  border-bottom: ${(props) => (props.$active ? " 1px solid #000000" : "transparent")};
+  &:hover {
+    color: #FFD370;
+    /* border-bottom: 1px solid #000000; */
   }
 `
 
@@ -85,8 +97,51 @@ const TodoItem = styled.li`
   }
   `
 
+type TodoItem = {
+  content: string;
+  createTime: number;
+  id: string;
+  status: boolean;
+}
+type FilterType = "all" | "active" | "completed"
 
 const Home = ()=>{
+  const [todoItems,setTodoItems] = useState< TodoItem[] >([])
+  const [filter, setFilter] = useState<FilterType>("all")
+  const handleFilterChange = (value: FilterType) => {
+    setFilter(value); 
+  }
+  const filterTodoItems = todoItems.filter((todo) => {
+    if (filter === "active") return !todo.status
+    if (filter === "completed") return todo.status
+    return true
+  })
+  useEffect(() => {
+    const responseData: TodoItem[] = [
+      {
+        content: "買晚餐",
+        createTime: 1743340055,
+        id: "-OMb9XcMmDop98NqTNjM",
+        status: false
+      },
+      {
+        content: "買早餐",
+        createTime: 1743340055,
+        id: "-OMb9XcMmDop98NqTNjk",
+        status: false
+      },
+      {
+        content: "買午餐",
+        createTime: 1743340055,
+        id: "-OMb9XcMmDop98NqTNj",
+        status: false
+      }
+    ];
+    setTodoItems(responseData);
+  }, []); 
+  useEffect(() => {
+    console.log("todoItems 更新後:", todoItems);
+  }, [todoItems]); 
   return(
     <>
       <Container>
@@ -96,24 +151,33 @@ const Home = ()=>{
         </InputContent>
 
         <FilterContent>
-          <button className="filter-Btn" >
+          <FilterButton $active={filter === "all"} onClick={() => handleFilterChange("all")}>
             全部
-          </button>
-          <button className="filter-Btn">
+          </FilterButton>
+          <FilterButton $active={filter === "active"} onClick={() => handleFilterChange("active")}>
             未完成
-          </button>
-          <button className="filter-Btn">
+          </FilterButton>
+          <FilterButton $active={filter === "completed"} onClick={() => handleFilterChange("completed")}>
             已完成
-          </button>
+          </FilterButton>
         </FilterContent>
         <TodoContent>
-          <TodoItem>
+          {/* <TodoItem>
             <div className="todo-checkbox">
               <p></p>
             </div>
             <div className="todo-content">內容內容內容內容內容</div>
             <button className="todo-delbtn">刪除按鈕</button>
-          </TodoItem>
+          </TodoItem> */}
+          {filterTodoItems.map((item) => (
+            <TodoItem key={item.id}>
+              <div className="todo-checkbox">
+                <p></p>
+              </div>
+              <div className="todo-content">{item.content}</div>
+              <button className="todo-delbtn">刪除按鈕</button>
+            </TodoItem>
+          ))}
         </TodoContent>
       </Container>
     </>
