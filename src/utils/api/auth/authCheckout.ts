@@ -24,7 +24,7 @@ export const checkoutUser = async (): Promise<CheckoutResponse> => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
+        "Authorization": `${token}`
       }
     });
 

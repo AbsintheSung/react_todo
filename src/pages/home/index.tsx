@@ -3,6 +3,7 @@ import styled from "styled-components"
 import { useState,useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck,faTrash,faPenToSquare,faXmark } from "@fortawesome/free-solid-svg-icons";
+import { getTodoList } from "../../utils/api/list/getList";
 
 const InputContent = styled.div`
   display: flex;
@@ -148,6 +149,18 @@ const Home = ()=>{
   const [filter, setFilter] = useState<FilterType>("all")
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editValue, setEditValue] = useState<string>("")
+
+  const fetchTodos = async () => {
+    const response = await getTodoList();
+    if(response.status){
+      console.log('獲取成功')
+    }else{
+      console.log('獲取失敗')
+    }
+  }
+  useEffect(() => {
+    fetchTodos();
+  }, []);
 
   // 篩選邏輯
   const handleFilterChange = (value: FilterType) => {
