@@ -24,11 +24,11 @@ export const loginUser = async (userData: LoginRequest): Promise<ApiResponse> =>
       },
       body: JSON.stringify(userData),
     });
-
+    console.log(response)
     const responseData = await response.json();
     console.log("解析的 responseData", responseData);
 
-    if (response.status) {
+    if (response.ok) {
       return responseData as LoginResponse;
     }
 
@@ -45,6 +45,6 @@ export const loginUser = async (userData: LoginRequest): Promise<ApiResponse> =>
     }
   } catch (error) {
     console.error("登入錯誤:", error);
-    return { status: false, message: "未知錯誤" };
+    return error as ApiError;
   }
 };

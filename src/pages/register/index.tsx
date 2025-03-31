@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import  {z , ZodType} from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerUser, type RegisterRequest } from "../../utils/api/register"
+import { registerUser, type RegisterRequest,type RegisterError } from "../../utils/api/register"
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
@@ -56,18 +56,27 @@ const Register = () =>{
       password: values.password,
       email: values.email
     }
-    try {
-      const response = await registerUser(formData)
-      console.log('response',response)
-      if(response?.data?.status){
-        console.log('跳轉')
-        showToast("註冊成功，請登入！", "success");
-        navigate('/login')
-      }
-    } catch (error) {
-      const errorMessage = (error as { error: string })?.error;
-      showToast(`${errorMessage}`, "error");
+    const response = await registerUser(formData)
+    if(response.status){
+      console.log('註冊成功',response.uid)
+      showToast("註冊成功，請登入！", "success")
+      navigate('/login')
+    }else{
+      const error =response as RegisterError
+      showToast(`${error.message}`, "error")
     }
+    // try {
+    //   const response = await registerUser(formData)
+    //   console.log('response',response)
+    //   if(response?.data?.status){
+    //     console.log('跳轉')
+    //     showToast("註冊成功，請登入！", "success");
+    //     navigate('/login')
+    //   }
+    // } catch (error) {
+    //   const errorMessage = (error as { error: string })?.error;
+    //   showToast(`${errorMessage}`, "error");
+    // }
     reset({
       email:"" ,
       name: "",
