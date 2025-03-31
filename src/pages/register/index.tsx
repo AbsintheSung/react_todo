@@ -6,6 +6,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerUser, type RegisterRequest } from "../../utils/api/register"
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 type Form = {
   email: string;
   name: string;
@@ -13,7 +15,18 @@ type Form = {
   confirmPassword: string;
 }
 
-
+const MySwal = withReactContent(Swal);
+const showToast = (message: string, icon: "success" | "error" | "warning" | "info") => {
+  MySwal.fire({
+    toast: true,
+    position: "top-end",
+    icon: icon,
+    title: message,
+    showConfirmButton: false,
+    timer: 750, // 3 秒後自動消失
+    timerProgressBar: false,
+  });
+};
 const Register = () =>{
   const navigate = useNavigate();
   const validationSchema : ZodType<Form> = z.object({
@@ -48,10 +61,12 @@ const Register = () =>{
       console.log('response',response)
       if(response?.data?.status){
         console.log('跳轉')
+        showToast("註冊成功，請登入！", "success");
         navigate('/login')
       }
     } catch (error) {
-      console.log(error)
+      const errorMessage = (error as { error: string })?.error;
+      showToast(`${errorMessage}`, "error");
     }
     reset({
       email:"" ,

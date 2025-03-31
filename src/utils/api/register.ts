@@ -9,8 +9,9 @@ export type RegisterResponse = {
   uid: string
 }
 export type ApiError = {
-  message: string;
-  status: boolean;
+  message?: string;
+  status?: boolean;
+  error?: string
 }
 
 export type ApiResponse<T> = {
