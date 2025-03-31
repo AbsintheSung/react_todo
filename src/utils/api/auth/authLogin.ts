@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 export type LoginRequest = {
   email: string;
   password: string;
@@ -29,6 +30,8 @@ export const loginUser = async (userData: LoginRequest): Promise<ApiResponse> =>
     console.log("解析的 responseData", responseData);
 
     if (response.ok) {
+      Cookies.set('token', responseData.token);
+      Cookies.set('nickname', responseData.nickname);
       return responseData as LoginResponse;
     }
 
