@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import  {z , ZodType} from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { loginUser } from '../../utils/api/getAuthLogin';
 type LoginForm = {
   email: string;
   password: string;
@@ -26,9 +26,13 @@ function Login() {
       }
     })
   
-    const onSubmit = (values:LoginForm) =>{
-      console.log('成功的console',values)
-      console.log('發送API，並重置表單')
+    const onSubmit = async (values:LoginForm) =>{
+      const response = await loginUser(values);
+      if(response.status){
+        console.log('成功登入',response)
+      }else{
+        console.log('失敗',response.message)
+      }
       reset({
         email: "",
         password: ""
