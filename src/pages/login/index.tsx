@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import  {z , ZodType} from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginUser } from '../../utils/api/getAuthLogin';
+import { loginUser } from '../../utils/api/auth/authLogin';
 type LoginForm = {
   email: string;
   password: string;

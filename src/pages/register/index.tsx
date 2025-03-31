@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import  {z , ZodType} from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerUser, type RegisterRequest,type RegisterError } from "../../utils/api/register"
+import { registerUser, type RegisterRequest,type RegisterError } from "../../utils/api/auth/authRegister"
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
