@@ -1,18 +1,18 @@
 import Cookies from "js-cookie";
 
-export type delSuccessResponse = {
+export type DelSuccessResponse = {
   status: true;
   message: string;
 };
 
-export type delErrorResponse = {
+export type DelErrorResponse = {
   status: false;
   message: string;
 };
 
-export type PutResponse = delSuccessResponse | delErrorResponse;
+export type DelResponse = DelSuccessResponse | DelErrorResponse;
 
-export const deleteTodo = async (id: string): Promise<PutResponse> => {
+export const deleteTodo = async (id: string): Promise<DelResponse> => {
   try {
 
     const token = Cookies.get('token');
@@ -27,7 +27,7 @@ export const deleteTodo = async (id: string): Promise<PutResponse> => {
     console.log("解析的 responseData", responseData);
 
     if (response.ok) {
-      return responseData as delSuccessResponse;
+      return responseData as DelSuccessResponse;
     }
 
     // 依照不同的 HTTP 状态码处理错误
@@ -38,6 +38,6 @@ export const deleteTodo = async (id: string): Promise<PutResponse> => {
         throw { status: false, message: responseData.message || "刪除失敗" };
     }
   } catch (error) {
-    return error as delErrorResponse;
+    return error as DelErrorResponse;
   }
 };
