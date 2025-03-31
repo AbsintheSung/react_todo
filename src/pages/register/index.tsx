@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import  {z , ZodType} from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { registerUser, type RegisterRequest } from "../../utils/api/register"
+import { useNavigate } from "react-router-dom";
 type Form = {
   email: string;
   name: string;
@@ -14,6 +15,7 @@ type Form = {
 
 
 const Register = () =>{
+  const navigate = useNavigate();
   const validationSchema : ZodType<Form> = z.object({
     email: z.string().nonempty( { message: "請輸入電子郵件" }).email({ message: "請輸入有效的電子郵件格式" }),
     name: z.string().nonempty( { message: "請輸入您的暱稱" }),
@@ -35,9 +37,22 @@ const Register = () =>{
     }
   })
 
-  const onSubmit = (values:Form) =>{
-    console.log('成功的console',values)
-    console.log('發送API，並重置表單')
+  const onSubmit = async (values:Form) =>{
+    const formData:RegisterRequest = {
+      nickname: values.name,
+      password: values.password,
+      email: values.email
+    }
+    try {
+      const response = await registerUser(formData)
+      console.log('response',response)
+      if(response?.data?.status){
+        console.log('跳轉')
+        navigate('/login')
+      }
+    } catch (error) {
+      console.log(error)
+    }
     reset({
       email:"" ,
       name: "",
