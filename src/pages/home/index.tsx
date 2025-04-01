@@ -2,7 +2,7 @@ import { TodoItems,FilterType,TodoItemContent, } from '../../types/home'
 import { Container } from "../../styles/container";
 import { useState,useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck,faTrash,faPenToSquare,faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCheck,faTrash,faPenToSquare,faXmark,faPlus } from "@fortawesome/free-solid-svg-icons";
 import { getTodoList } from "../../utils/api/list/getList";
 import { postTodoList } from "../../utils/api/list/postList";
 import { putTodoList } from "../../utils/api/list/putList";
@@ -19,13 +19,19 @@ import {
 import Header from '../../components/Header';
 import EmptyContent from '../../components/EmptyContent';
 import FilterButtons from './FilterButtons';
+import { ClipLoader } from "react-spinners";
 const Home = ()=>{
   const [inputValue, setInputValue] = useState("")
   const [todoItems,setTodoItems] = useState< TodoItems[] >([])
   const [filter, setFilter] = useState<FilterType>("all")
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editValue, setEditValue] = useState<string>("")
-
+  const [loadingItemId, setLoadingItemId] = useState<string | null>(null);
+  const [loadingAction, setLoadingAction] = useState<string | null>(null);
+  const [otherLoading,setOtherLoading] = useState<boolean>(false)
+  const isLoading = (id: string, action: string): boolean => {
+    return loadingItemId === id && loadingAction === action;
+  };
   const fetchTodos = async () => {
     const response = await getTodoList();
     if(response.status){
@@ -59,6 +65,9 @@ const Home = ()=>{
       2.也可以在這邊在發送一個獲取資料的請求，確保資料正確。
       看人使用
     */
+    setLoadingItemId(id);
+    setLoadingAction("checkbox");
+    setOtherLoading(true)
     const response  = await patchTodoList(id)
     console.log(response)
     if(response.status){
@@ -71,7 +80,9 @@ const Home = ()=>{
     }else{
       console.log('狀態更新失敗')
     }
-
+    setLoadingItemId(null);
+    setLoadingAction(null);
+    setOtherLoading(false)
   }
 
   //添加新項目
@@ -79,6 +90,7 @@ const Home = ()=>{
     const todoItem:TodoItemContent = {
       content:inputValue
     } 
+    setOtherLoading(true)
     const response = await postTodoList(todoItem)
     if(response.status){
       /*後端回傳新增的單一項目
@@ -92,6 +104,7 @@ const Home = ()=>{
     }
     console.log(response)
     setInputValue("")
+    setOtherLoading(false)
   }
 
   // 刪除項目
@@ -123,6 +136,9 @@ const Home = ()=>{
       2.也可以在這邊在發送一個獲取資料的請求，確保資料正確。
       看人使用
     */
+    setLoadingItemId(id);
+    setLoadingAction("save");
+    setOtherLoading(true)
     const response = await putTodoList(id,{ content : editValue } )
     if(response.status){
       setTodoItems(todoItems.map((item) => (item.id === editingId ? { ...item, content: editValue } : item)))
@@ -131,7 +147,9 @@ const Home = ()=>{
     }
     setEditingId(null)
     setEditValue("")
-    console.log(response)
+    setLoadingItemId(null);
+    setLoadingAction(null);
+    setOtherLoading(false)
   }
 
   // 取消编辑
@@ -140,6 +158,7 @@ const Home = ()=>{
     setEditValue("")
   } 
 
+  
   return(
     <>
       <Header />
@@ -150,8 +169,15 @@ const Home = ()=>{
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
+            disabled={otherLoading}
           />
-          <button onClick={addTodoItem}>+</button>
+          <button onClick={addTodoItem}>
+            {otherLoading? (
+              <ClipLoader size={20} color="#FFD370" />
+              ) : (
+                <FontAwesomeIcon icon={faPlus} />
+            )}
+          </button>
         </InputContent>
 
         {todoItems.length === 0 ? ( <EmptyContent />):(
@@ -164,11 +190,15 @@ const Home = ()=>{
               {filterTodoItems.map((item) => (
                 <TodoItem key={item.id}>
                   {editingId !== item.id && (
-                    <div className="todo-checkbox" onClick={() => handleCheckboxStatus(item.id)}>
-                      <p>
-                        {item.status? <FontAwesomeIcon icon={faCheck} /> : ""}
-                      </p>
-                    </div>
+                    <button className="todo-checkbox" onClick={() => handleCheckboxStatus(item.id)} disabled={otherLoading}>
+                       {isLoading(item.id, "checkbox") ? (
+                          <ClipLoader size={20} color="#FFD370" />
+                        ) : (
+                          <p>
+                            {item.status ? <FontAwesomeIcon icon={faCheck} /> : ""}
+                          </p>
+                        )}
+                    </button>
                   )}
                     {editingId === item.id ? (
                     <>
@@ -176,12 +206,17 @@ const Home = ()=>{
                         value={editValue}
                         onChange={(e) => setEditValue(e.target.value)}
                         type="text"
+                        disabled={otherLoading}
                       />
                       <ButtonGroup>
-                        <button className="todo-savebtn" onClick={()=>saveEdit(item.id)}>
-                          <FontAwesomeIcon icon={faCheck} />
+                        <button className="todo-savebtn" onClick={()=>saveEdit(item.id)} disabled={otherLoading}>
+                          {isLoading(item.id, "save") ? (
+                            <ClipLoader size={20} color="#FFD370" />
+                          ) : (
+                            <FontAwesomeIcon icon={faCheck} />
+                          )}
                         </button>
-                        <button className="todo-cancelbtn" onClick={cancelEdit}>
+                        <button className="todo-cancelbtn" onClick={cancelEdit} disabled={otherLoading}>
                           <FontAwesomeIcon icon={faXmark} />
                         </button>
                       </ButtonGroup>
@@ -191,12 +226,16 @@ const Home = ()=>{
                       <TodoText $status={item.status}>{item.content}</TodoText>
                       <ButtonGroup>
                         {!item.status &&(
-                          <button className="todo-editbtn" onClick={() => startEditing(item.id, item.content)}>
+                          <button className="todo-editbtn" onClick={() => startEditing(item.id, item.content)} disabled={otherLoading}>
                             <FontAwesomeIcon icon={faPenToSquare} />
                           </button>
                         )}
-                        <button className="todo-delbtn" onClick={()=>handleDelTodoItem(item.id)}>
-                          <FontAwesomeIcon icon={faTrash} />
+                        <button className="todo-delbtn" onClick={()=>handleDelTodoItem(item.id)} disabled={otherLoading}>
+                          {isLoading(item.id, "delete") ? (
+                            <ClipLoader size={20} color="#FFD370" />
+                          ) : (
+                            <FontAwesomeIcon icon={faTrash} />
+                          )}
                         </button> 
                       </ButtonGroup>
                     </>

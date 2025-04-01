@@ -72,6 +72,8 @@ export const TodoItem = styled.li`
   gap:0px 12px;
   border-bottom: 1px solid #eee;
   & > .todo-checkbox{
+    background-color: transparent;
+    border: none;
     cursor: pointer;
     & > p{
       margin: 0px;
