@@ -1,16 +1,5 @@
 import Cookies from "js-cookie";
-
-export type DelSuccessResponse = {
-  status: true;
-  message: string;
-};
-
-export type DelErrorResponse = {
-  status: false;
-  message: string;
-};
-
-export type DelResponse = DelSuccessResponse | DelErrorResponse;
+import { DelSuccessResponse, DelErrorResponse, DelResponse } from "../../../types/list";
 
 export const deleteTodo = async (id: string): Promise<DelResponse> => {
   try {

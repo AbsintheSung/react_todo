@@ -21,7 +21,7 @@ export const registerUser = async (userData: RegisterRequest): Promise<RegisterA
       return responseData as RegisterResponse;
     }
 
-    // 依照不同的 HTTP 狀態碼拋出錯誤
+
     switch (response.status) {
       case 400:
         throw { status: false, message: responseData.message || "用戶已存在" };

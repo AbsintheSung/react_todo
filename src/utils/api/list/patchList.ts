@@ -1,15 +1,9 @@
 import Cookies from "js-cookie";
-export type PatchSuccessResponse = {
-  status: true;
-  message: string;
-};
-
-export type PatchErrorResponse = {
-  status: false;
-  message: string;
-};
-
-export type PatchResponse = PatchSuccessResponse | PatchErrorResponse;
+import {
+  PatchSuccessResponse,
+  PatchErrorResponse,
+  PatchResponse
+} from "../../../types/list";
 
 export const patchTodoList = async (id: string): Promise<PatchResponse> => {
   try {

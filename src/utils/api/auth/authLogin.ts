@@ -24,7 +24,7 @@ export const loginUser = async (userData: LoginRequest): Promise<LoginApiRespons
       return responseData as LoginResponse;
     }
 
-    // 依照不同的 HTTP 狀態碼拋出錯誤
+
     switch (response.status) {
       case 400:
         throw { status: false, message: responseData.message || "欄位驗證失敗" };
