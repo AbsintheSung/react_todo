@@ -20,7 +20,7 @@ export const postTodoList = async (content: ItemContent): Promise<AddTodoRespons
     });
 
     const responseData = await response.json();
-    console.log("解析的 responseData", responseData);
+    // console.log("解析的 responseData", responseData);
 
     if (response.status === 201) {
       return responseData as AddTodoSuccessResponse;

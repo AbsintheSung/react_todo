@@ -13,9 +13,9 @@ export const registerUser = async (userData: RegisterRequest): Promise<RegisterA
       },
       body: JSON.stringify(userData),
     });
-    console.log(response)
+    // console.log(response)
     const responseData = await response.json();
-    console.log("解析的 responseData", responseData);
+    // console.log("解析的 responseData", responseData);
 
     if (response.ok) {
       return responseData as RegisterResponse;
@@ -29,7 +29,7 @@ export const registerUser = async (userData: RegisterRequest): Promise<RegisterA
         throw { status: false, message: responseData.message || "註冊失敗" };
     }
   } catch (error) {
-    console.error("註冊錯誤:", error);
+    // console.error("註冊錯誤:", error);
     return error as ApiError;
   }
 };
