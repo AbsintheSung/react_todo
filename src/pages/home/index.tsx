@@ -10,8 +10,6 @@ import { deleteTodo } from "../../utils/api/list/delItemList";
 import { patchTodoList } from '../../utils/api/list/patchList'
 import {
   InputContent,
-  FilterContent,
-  FilterButton,
   TodoContent,
   TodoItem,
   TodoText,
@@ -20,6 +18,7 @@ import {
 } from '../../styles/home'
 import Header from '../../components/Header';
 import EmptyContent from '../../components/EmptyContent';
+import FilterButtons from './FilterButtons';
 const Home = ()=>{
   const [inputValue, setInputValue] = useState("")
   const [todoItems,setTodoItems] = useState< TodoItems[] >([])
@@ -157,17 +156,10 @@ const Home = ()=>{
 
         {todoItems.length === 0 ? ( <EmptyContent />):(
           <>
-            <FilterContent>
-              <FilterButton $active={filter === "all"} onClick={() => handleFilterChange("all")}>
-                全部
-              </FilterButton>
-              <FilterButton $active={filter === "active"} onClick={() => handleFilterChange("active")}>
-                未完成
-              </FilterButton>
-              <FilterButton $active={filter === "completed"} onClick={() => handleFilterChange("completed")}>
-                已完成
-              </FilterButton>
-            </FilterContent>
+            <FilterButtons 
+              filter={filter} 
+              onFilterChange={handleFilterChange} 
+            />
             <TodoContent>
               {filterTodoItems.map((item) => (
                 <TodoItem key={item.id}>
