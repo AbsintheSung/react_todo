@@ -13,9 +13,9 @@ export const signOutUser = async (): Promise<SignOutResponse> => {
         "Authorization": `${token}`
       },
     });
-    console.log(response)
+    // console.log(response)
     const responseData = await response.json();
-    console.log("解析的 responseData", responseData);
+    // console.log("解析的 responseData", responseData);
 
     if (response.ok) {
       Cookies.remove("token");
@@ -30,7 +30,7 @@ export const signOutUser = async (): Promise<SignOutResponse> => {
         throw { status: false, message: responseData.message || "登出失敗" };
     }
   } catch (error) {
-    console.error("登出錯誤:", error);
+    // console.error("登出錯誤:", error);
     return error as ApiError;
   }
 };

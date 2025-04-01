@@ -20,7 +20,7 @@ export const putTodoList = async (id: string, todoData: TodoContent): Promise<Pu
     });
 
     const responseData = await response.json();
-    console.log("解析的 responseData", responseData);
+    // console.log("解析的 responseData", responseData);
 
     if (response.ok) {
       return responseData as PutSuccessResponse;
@@ -34,7 +34,7 @@ export const putTodoList = async (id: string, todoData: TodoContent): Promise<Pu
         throw { status: false, message: responseData.message || "更新失敗" };
     }
   } catch (error) {
-    console.error("更新 Todo 錯誤:", error);
+    // console.error("更新 Todo 錯誤:", error);
     return error as PutErrorResponse;
   }
 };

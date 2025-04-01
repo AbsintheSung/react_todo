@@ -18,7 +18,7 @@ export const checkoutUser = async (): Promise<CheckoutResponse> => {
     });
 
     const responseData = await response.json();
-    console.log("解析的 responseData", responseData);
+    // console.log("解析的 responseData", responseData);
 
     if (response.ok) {
       return responseData as CheckoutSuccessResponse;

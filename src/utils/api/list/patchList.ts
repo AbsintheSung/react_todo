@@ -17,7 +17,7 @@ export const patchTodoList = async (id: string): Promise<PatchResponse> => {
     });
 
     const responseData = await response.json();
-    console.log("解析的 responseData", responseData);
+    // console.log("解析的 responseData", responseData);
 
     if (response.ok) {
       return responseData as PatchSuccessResponse;
@@ -31,7 +31,7 @@ export const patchTodoList = async (id: string): Promise<PatchResponse> => {
         throw { status: false, message: responseData.message || "修改失敗" };
     }
   } catch (error) {
-    console.error("切換狀態失敗", error);
+    // console.error("切換狀態失敗", error);
     return error as PatchErrorResponse;
   }
 };

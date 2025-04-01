@@ -39,10 +39,10 @@ const Home = ()=>{
   const fetchTodos = async () => {
     const response = await getTodoList();
     if(response.status){
-      console.log('獲取成功',response.data)
+      // console.log('獲取成功',response.data)
       setTodoItems([...response.data])
     }else{
-      console.log('獲取失敗')
+      // console.log('獲取失敗')
       setTodoItems([])
     }
   }
@@ -52,7 +52,7 @@ const Home = ()=>{
       if (!response.status) {
         navigate("/login"); 
       }
-      console.log('測試')
+      // console.log('測試')
     };
     checkout();
   }, [navigate]); 
@@ -84,7 +84,7 @@ const Home = ()=>{
     setLoadingAction("checkbox");
     setOtherLoading(true)
     const response  = await patchTodoList(id)
-    console.log(response)
+    // console.log(response)
     if(response.status){
       setTodoItems(todoItems.map((item) => {
         if (item.id === id) {
@@ -93,7 +93,7 @@ const Home = ()=>{
         return item;
       }));
     }else{
-      console.log('狀態更新失敗')
+      // console.log('狀態更新失敗')
     }
     setLoadingItemId(null);
     setLoadingAction(null);
@@ -115,9 +115,9 @@ const Home = ()=>{
       */
       setTodoItems([...todoItems, response.newTodo])
     }else{
-      console.log('新增失敗')
+      // console.log('新增失敗')
     }
-    console.log(response)
+    // console.log(response)
     setInputValue("")
     setOtherLoading(false)
   }
@@ -133,14 +133,14 @@ const Home = ()=>{
     if(response.status){
       setTodoItems(todoItems.filter((item) => item.id !==id));
     }else{
-      console.log('刪除失敗')
+      // console.log('刪除失敗')
     }
   }
 
   // 開啟編輯項目
   const startEditing = (id: string, text: string) => {
     setEditingId(id)
-    console.log(text)
+    // console.log(text)
     setEditValue(text)
   }
 
@@ -158,7 +158,7 @@ const Home = ()=>{
     if(response.status){
       setTodoItems(todoItems.map((item) => (item.id === editingId ? { ...item, content: editValue } : item)))
     }else{
-      console.log(response.message)
+      // console.log(response.message)
     }
     setEditingId(null)
     setEditValue("")
@@ -175,10 +175,10 @@ const Home = ()=>{
   const handleSignOut =async ()=>{
     const response = await signOutUser();
     if(response.status){
-      console.log('登出成功')
+      // console.log('登出成功')
       navigate('/login')
     }else{
-      console.log('登出失敗')
+      // console.log('登出失敗')
     }
   }
   

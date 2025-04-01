@@ -63,7 +63,7 @@ const Register = () =>{
     setIsLoading(true)
     const response = await registerUser(formData)
     if(response.status){
-      console.log('註冊成功',response.uid)
+      // console.log('註冊成功',response.uid)
       showToast("註冊成功，請登入！", "success")
       navigate('/login')
     }else{
@@ -80,7 +80,7 @@ const Register = () =>{
     setIsLoading(false)
   }
 
-  console.log('errors',errors)
+  // console.log('errors',errors)
 
   return(
     <>

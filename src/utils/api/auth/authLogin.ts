@@ -14,9 +14,9 @@ export const loginUser = async (userData: LoginRequest): Promise<LoginApiRespons
       },
       body: JSON.stringify(userData),
     });
-    console.log(response)
+    // console.log(response)
     const responseData = await response.json();
-    console.log("解析的 responseData", responseData);
+    // console.log("解析的 responseData", responseData);
 
     if (response.ok) {
       Cookies.set('token', responseData.token);
@@ -36,7 +36,7 @@ export const loginUser = async (userData: LoginRequest): Promise<LoginApiRespons
         throw { status: false, message: responseData.message || "登入失敗" };
     }
   } catch (error) {
-    console.error("登入錯誤:", error);
+    // console.error("登入錯誤:", error);
     return error as ApiError;
   }
 };
