@@ -16,17 +16,17 @@ export type PutErrorResponse = {
 
 export type PutResponse = PutSuccessResponse | PutErrorResponse;
 
-export const updateTodo = async (id: string, todoData: TodoContent): Promise<PutResponse> => {
+export const putTodoList = async (id: string, todoData: TodoContent): Promise<PutResponse> => {
   try {
-  
+
     const token = Cookies.get('token');
     const response = await fetch(`https://todolist-api.hexschool.io/todos/${id}`, {
       method: "PUT",
       headers: {
-        "Authorization": `Bearer ${token}`,
+        "Authorization": `${token}`,
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(todoData)
+      body: JSON.stringify({ ...todoData })
     });
 
     const responseData = await response.json();
@@ -36,7 +36,7 @@ export const updateTodo = async (id: string, todoData: TodoContent): Promise<Put
       return responseData as PutSuccessResponse;
     }
 
-   
+
     switch (response.status) {
       case 400:
         throw { status: false, message: responseData.message || "更新失敗" };

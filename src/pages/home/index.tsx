@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck,faTrash,faPenToSquare,faXmark } from "@fortawesome/free-solid-svg-icons";
 import { getTodoList } from "../../utils/api/list/getList";
 import { postTodoList } from "../../utils/api/list/postList";
+import { putTodoList } from "../../utils/api/list/putList";
 
 const InputContent = styled.div`
   display: flex;
@@ -221,20 +222,31 @@ const Home = ()=>{
     setTodoItems(todoItems.filter((item) => item.id !==id));
   }
 
-  // 編輯項目
+  // 開啟編輯項目
   const startEditing = (id: string, text: string) => {
     setEditingId(id)
     console.log(text)
     setEditValue(text)
   }
 
-  // 保存编辑
-  const saveEdit = () => {
-    if (editingId !== null && editValue.trim() !== "") {
+  // 確認编辑
+  const saveEdit = async (id:string) => {
+    console.log(id)
+    console.log(editValue)
+    const response = await putTodoList(id,{ content : editValue } )
+    if(response.status){
       setTodoItems(todoItems.map((item) => (item.id === editingId ? { ...item, content: editValue } : item)))
-      setEditingId(null)
-      setEditValue("")
+    }else{
+      console.log(response.message)
     }
+    setEditingId(null)
+    setEditValue("")
+    console.log(response)
+    // if (editingId !== null && editValue.trim() !== "") {
+    //   setTodoItems(todoItems.map((item) => (item.id === editingId ? { ...item, content: editValue } : item)))
+    //   setEditingId(null)
+    //   setEditValue("")
+    // }
   }
 
   // 取消编辑
@@ -324,7 +336,7 @@ const Home = ()=>{
                     type="text"
                   />
                   <ButtonGroup>
-                    <button className="todo-savebtn" onClick={saveEdit}>
+                    <button className="todo-savebtn" onClick={()=>saveEdit(item.id)}>
                       <FontAwesomeIcon icon={faCheck} />
                     </button>
                     <button className="todo-cancelbtn" onClick={cancelEdit}>
