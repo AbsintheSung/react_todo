@@ -9,13 +9,8 @@ export const checkoutUser = async (): Promise<CheckoutResponse> => {
   try {
 
     const token = Cookies.get('token');
-
-    if (!token) {
-      return { status: false, message: "用户未登录" };
-    }
-
-    const response = await fetch(`https://todolist-api.hexschool.io/checkout`, {
-      method: "POST",
+    const response = await fetch(`https://todolist-api.hexschool.io/users/checkout`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `${token}`
