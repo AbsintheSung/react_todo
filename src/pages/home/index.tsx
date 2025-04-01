@@ -231,8 +231,11 @@ const Home = ()=>{
 
   // 確認编辑
   const saveEdit = async (id:string) => {
-    console.log(id)
-    console.log(editValue)
+    /*後端只回傳 更新成功
+      1. 可以直接透過 map 方式，更新整個資料。
+      2.也可以在這邊在發送一個獲取資料的請求，確保資料正確。
+      看人使用
+    */
     const response = await putTodoList(id,{ content : editValue } )
     if(response.status){
       setTodoItems(todoItems.map((item) => (item.id === editingId ? { ...item, content: editValue } : item)))
