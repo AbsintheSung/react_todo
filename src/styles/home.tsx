@@ -31,9 +31,9 @@ export const InputContent = styled.div`
     align-items: center;
     justify-content: center;
     
-    &:hover {
+    /* &:hover {
       background-color: #FFD370;
-    }
+    } */
   }
 `
 
