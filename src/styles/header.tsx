@@ -6,8 +6,11 @@ export const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 16px;
+  padding:16px;
   width: 100%;
+  @media (min-width: ${breakpoints.sm}px) {
+    padding:36px 16px
+  }
 `
 export const LogoContainer = styled.div`
   display: flex;

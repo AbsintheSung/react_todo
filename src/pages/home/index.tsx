@@ -16,6 +16,7 @@ import {
   TodoItem,
   TodoText,
   ButtonGroup,
+  EditInput
 } from '../../styles/home'
 import Header from '../../components/Header';
 const Home = ()=>{
@@ -175,7 +176,7 @@ const Home = ()=>{
               )}
                {editingId === item.id ? (
                 <>
-                  <input
+                  <EditInput
                     value={editValue}
                     onChange={(e) => setEditValue(e.target.value)}
                     type="text"
