@@ -49,6 +49,7 @@ export const FormLogin = styled.form`
       background-color: black;
       color:white;
       border-radius: 10px;
+      border: none;
     }
     & > .login-link{
       text-decoration: none;
@@ -60,7 +61,7 @@ export const FormLogin = styled.form`
     width: 70%;
   }
 `
-export const RegistError = styled.p<{ $isVisible: boolean }>`
+export const LoginError = styled.p<{ $isVisible: boolean }>`
   position: relative;
   margin: 0px;
   padding: 8px 0px;

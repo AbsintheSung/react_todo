@@ -1,5 +1,5 @@
 import { Container } from "../../styles/container";
-import { LoginContent, FormLogin,RegistError } from "../../styles/login";
+import { LoginContent, FormLogin,LoginError } from "../../styles/login";
 import { Link } from "react-router-dom";
 import  {z , ZodType} from 'zod'
 import { useForm } from 'react-hook-form'
@@ -50,16 +50,16 @@ function Login() {
               <div>
                 <label>Email</label>
                 <input type="email" {...login('email')} ></input>
-                <RegistError $isVisible={!!errors.email?.message}>
+                <LoginError $isVisible={!!errors.email?.message}>
                   <span>{errors.email?.message || ""}</span>
-                </RegistError>
+                </LoginError>
               </div>
               <div>
                 <label>密碼</label>
                 <input type="password" {...login('password')}></input>
-                <RegistError $isVisible={!!errors.password?.message}>
+                <LoginError $isVisible={!!errors.password?.message}>
                   <span>{errors.password?.message || ""}</span>
-                </RegistError>
+                </LoginError>
               </div>
               <div className="login-btn-group">
                 <button className="login-btn">登入</button>
