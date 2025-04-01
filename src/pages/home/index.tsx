@@ -17,7 +17,7 @@ import {
   TodoText,
   ButtonGroup,
 } from '../../styles/home'
-
+import Header from '../../components/Header';
 const Home = ()=>{
   const [inputValue, setInputValue] = useState("")
   const [todoItems,setTodoItems] = useState< TodoItems[] >([])
@@ -141,6 +141,7 @@ const Home = ()=>{
 
   return(
     <>
+      <Header />
       <Container>
         <InputContent>
           <input 
