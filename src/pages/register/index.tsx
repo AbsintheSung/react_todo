@@ -1,5 +1,5 @@
 import { Container } from "../../styles/container";
-import {RegisterContent,FormRegister} from '../../styles/register'
+import {RegisterContent,FormRegister,RegisterError} from '../../styles/register'
 import { Link } from "react-router-dom";
 import  {z , ZodType} from 'zod'
 import { useForm } from 'react-hook-form'
@@ -79,38 +79,48 @@ const Register = () =>{
 
   return(
     <>
-     <Container >
-      <RegisterContent>
-        <h2>註冊</h2>
-        <FormRegister onSubmit={handleSubmit(onSubmit)}>
-          <div>
-            <label>Email</label>
-            <input type="email" {...register("email")}></input>
-            <p className="register-error">{errors.email?.message? errors.email.message :''}</p>
-          </div>
-          <div>
-            <label>您的暱稱</label>
-            <input type="text"  {...register("name")}></input>
-            <p  className="register-error">{errors.name?.message? errors.name.message :''}</p>
-          </div>
-          <div>
-            <label>密碼</label>
-            <input type="password"  {...register("password")}></input>
-            <p  className="register-error">{errors.password?.message? errors.password.message :''}</p>
-          </div>
-          <div>
-            <label>再次確認密碼</label>
-            <input type="password"  {...register("confirmPassword")}></input>
-            <p  className="register-error">{errors.confirmPassword?.message? errors.confirmPassword.message :''}</p>
-          </div>
-          <div>
-            <button>註冊</button>
-            <Link to="../login">連結到登入</Link>
-          </div>
-        </FormRegister>
-      </RegisterContent>
- 
-     </Container>
+     <main className="register-main">
+      <Container >
+        <RegisterContent>
+          <h2>註冊</h2>
+          <FormRegister onSubmit={handleSubmit(onSubmit)}>
+            <div>
+              <label>Email</label>
+              <input type="email" {...register("email")}></input>
+              <RegisterError $isVisible={!!errors.email?.message}>
+                <span>{errors.email?.message || ""}</span>
+              </RegisterError>
+            </div>
+            <div>
+              <label>您的暱稱</label>
+              <input type="text"  {...register("name")}></input>
+              <RegisterError $isVisible={!!errors.name?.message}>
+                <span>{errors.name?.message || ""}</span>
+              </RegisterError>
+            </div>
+            <div>
+              <label>密碼</label>
+              <input type="password"  {...register("password")}></input>
+              <RegisterError $isVisible={!!errors.password?.message}>
+                <span>{errors.password?.message || ""}</span>
+              </RegisterError>
+            </div>
+            <div>
+              <label>再次確認密碼</label>
+              <input type="password"  {...register("confirmPassword")}></input>
+              <RegisterError $isVisible={!!errors.confirmPassword?.message}>
+                <span>{errors.confirmPassword?.message || ""}</span>
+              </RegisterError>
+            </div>
+            <div className="register-btn-group"> 
+              <button className="register-btn">註冊</button>
+              <Link className="register-link" to="../login">登入</Link>
+            </div>
+          </FormRegister>
+        </RegisterContent>
+      </Container>
+     </main>
+    
     </>
   )
 }
