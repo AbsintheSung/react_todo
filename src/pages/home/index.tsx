@@ -7,6 +7,7 @@ import { getTodoList } from "../../utils/api/list/getList";
 import { postTodoList } from "../../utils/api/list/postList";
 import { putTodoList } from "../../utils/api/list/putList";
 import { deleteTodo } from "../../utils/api/list/delItemList";
+import { patchTodoList } from '../../utils/api/list/patchList'
 
 const InputContent = styled.div`
   display: flex;
@@ -182,14 +183,26 @@ const Home = ()=>{
     return true
   })
 
-  // 完成/未完成 邏輯 
-  const handleCheckboxStatus = (id: string) => {
-    setTodoItems(todoItems.map((item) => {
-      if (item.id === id) {
-        return { ...item, status: !item.status };
-      }
-      return item;
-    }));
+  // 完成/未完成 狀態更新
+  const handleCheckboxStatus = async (id: string) => {
+    /*後端回傳 更新成功
+      1. 使用 map 處理後，更新列表。
+      2.也可以在這邊在發送一個獲取資料的請求，確保資料正確。
+      看人使用
+    */
+    const response  = await patchTodoList(id)
+    console.log(response)
+    if(response.status){
+      setTodoItems(todoItems.map((item) => {
+        if (item.id === id) {
+          return { ...item, status: !item.status };
+        }
+        return item;
+      }));
+    }else{
+      console.log('狀態更新失敗')
+    }
+
   }
 
   //添加新項目

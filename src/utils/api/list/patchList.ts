@@ -11,7 +11,7 @@ export type PatchErrorResponse = {
 
 export type PatchResponse = PatchSuccessResponse | PatchErrorResponse;
 
-export const toggleTodoStatus = async (id: string): Promise<PatchResponse> => {
+export const patchTodoList = async (id: string): Promise<PatchResponse> => {
   try {
 
     const token = Cookies.get('token');
@@ -29,7 +29,7 @@ export const toggleTodoStatus = async (id: string): Promise<PatchResponse> => {
       return responseData as PatchSuccessResponse;
     }
 
-  
+
     switch (response.status) {
       case 400:
         throw { status: false, message: responseData.message || "修改失敗" };
