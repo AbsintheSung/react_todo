@@ -1,6 +1,7 @@
 import { TodoItems,FilterType,TodoItemContent, } from '../../types/home'
 import { Container } from "../../styles/container";
 import { useState,useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck,faTrash,faPenToSquare,faXmark,faPlus } from "@fortawesome/free-solid-svg-icons";
 import { getTodoList } from "../../utils/api/list/getList";
@@ -8,6 +9,8 @@ import { postTodoList } from "../../utils/api/list/postList";
 import { putTodoList } from "../../utils/api/list/putList";
 import { deleteTodo } from "../../utils/api/list/delItemList";
 import { patchTodoList } from '../../utils/api/list/patchList'
+import { signOutUser } from '../../utils/api/auth/authSignout'
+import { checkoutUser } from '../../utils/api/auth/authCheckout';
 import {
   InputContent,
   TodoContent,
@@ -29,6 +32,7 @@ const Home = ()=>{
   const [loadingItemId, setLoadingItemId] = useState<string | null>(null);
   const [loadingAction, setLoadingAction] = useState<string | null>(null);
   const [otherLoading,setOtherLoading] = useState<boolean>(false)
+  const navigate = useNavigate();
   const isLoading = (id: string, action: string): boolean => {
     return loadingItemId === id && loadingAction === action;
   };
@@ -42,6 +46,17 @@ const Home = ()=>{
       setTodoItems([])
     }
   }
+  useEffect(() => {
+    const checkout = async () => {
+      const response = await checkoutUser();
+      if (!response.status) {
+        navigate("/login"); 
+      }
+      console.log('測試')
+    };
+    checkout();
+  }, [navigate]); 
+
   useEffect(() => {
     fetchTodos();
   }, []);
@@ -157,11 +172,19 @@ const Home = ()=>{
     setEditingId(null)
     setEditValue("")
   } 
-
+  const handleSignOut =async ()=>{
+    const response = await signOutUser();
+    if(response.status){
+      console.log('登出成功')
+      navigate('/login')
+    }else{
+      console.log('登出失敗')
+    }
+  }
   
   return(
     <>
-      <Header />
+      <Header onSignOut={handleSignOut}/>
      
       <Container>
         <InputContent>

@@ -42,6 +42,13 @@ export type CheckoutErrorResponse = {
   message: string;
 };
 
+//登出
+export type SignOutSuccessResponse = {
+  status: false;
+  message: string;
+}
+
 export type RegisterApiResponse = RegisterResponse | ApiError;
 export type LoginApiResponse = LoginResponse | ApiError;
 export type CheckoutResponse = CheckoutSuccessResponse | CheckoutErrorResponse;
+export type SignOutResponse = SignOutSuccessResponse | ApiError;

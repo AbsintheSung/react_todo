@@ -2,10 +2,10 @@ import { HeaderContainer,LogoContainer,NavList } from '../styles/header'
 
 type HeaderProps = {
   username?: string
-  onLogout?: () => void
+  onSignOut?: () => void
 }
 
-export default function Header({ username = "使用者的代辦事項", onLogout = () => {} }: HeaderProps) {
+export default function Header({ username = "使用者的代辦事項", onSignOut = () => {} }: HeaderProps) {
   return (
     <HeaderContainer>
       <LogoContainer>
@@ -17,7 +17,7 @@ export default function Header({ username = "使用者的代辦事項", onLogout
 
       <NavList>
         <li><p className="user-Info">{username}</p></li>
-        <li> <button className="signout-btn" onClick={onLogout}>登出</button></li>
+        <li> <button className="signout-btn" onClick={onSignOut}>登出</button></li>
       </NavList>
     </HeaderContainer>
   )

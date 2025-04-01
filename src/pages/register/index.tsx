@@ -7,6 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { registerUser, } from "../../utils/api/auth/authRegister"
 import { RegisterRequest,ApiError } from "../../types/auth";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { ClipLoader } from "react-spinners";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 type Form = {
@@ -29,6 +31,7 @@ const showToast = (message: string, icon: "success" | "error" | "warning" | "inf
   });
 };
 const Register = () =>{
+   const [isLoading,setIsLoading] =  useState<boolean>(false)
   const navigate = useNavigate();
   const validationSchema : ZodType<Form> = z.object({
     email: z.string().nonempty( { message: "請輸入電子郵件" }).email({ message: "請輸入有效的電子郵件格式" }),
@@ -57,6 +60,7 @@ const Register = () =>{
       password: values.password,
       email: values.email
     }
+    setIsLoading(true)
     const response = await registerUser(formData)
     if(response.status){
       console.log('註冊成功',response.uid)
@@ -73,6 +77,7 @@ const Register = () =>{
       password:"" ,
       confirmPassword:"" 
     })
+    setIsLoading(false)
   }
 
   console.log('errors',errors)
@@ -113,7 +118,13 @@ const Register = () =>{
               </RegisterError>
             </div>
             <div className="register-btn-group"> 
-              <button className="register-btn">註冊</button>
+              <button className="register-btn" disabled={isLoading}>
+                {isLoading ? (
+                  <ClipLoader size={20} color="#FFD370" />
+                ) : (
+                  "註冊"
+                )}  
+              </button>
               <Link className="register-link" to="../login">登入</Link>
             </div>
           </FormRegister>
