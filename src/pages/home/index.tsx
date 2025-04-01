@@ -19,6 +19,7 @@ import {
   EditInput
 } from '../../styles/home'
 import Header from '../../components/Header';
+import EmptyContent from '../../components/EmptyContent';
 const Home = ()=>{
   const [inputValue, setInputValue] = useState("")
   const [todoItems,setTodoItems] = useState< TodoItems[] >([])
@@ -143,6 +144,7 @@ const Home = ()=>{
   return(
     <>
       <Header />
+     
       <Container>
         <InputContent>
           <input 
@@ -153,62 +155,65 @@ const Home = ()=>{
           <button onClick={addTodoItem}>+</button>
         </InputContent>
 
-        <FilterContent>
-          <FilterButton $active={filter === "all"} onClick={() => handleFilterChange("all")}>
-            全部
-          </FilterButton>
-          <FilterButton $active={filter === "active"} onClick={() => handleFilterChange("active")}>
-            未完成
-          </FilterButton>
-          <FilterButton $active={filter === "completed"} onClick={() => handleFilterChange("completed")}>
-            已完成
-          </FilterButton>
-        </FilterContent>
-        <TodoContent>
-          {filterTodoItems.map((item) => (
-            <TodoItem key={item.id}>
-              {editingId !== item.id && (
-                <div className="todo-checkbox" onClick={() => handleCheckboxStatus(item.id)}>
-                  <p>
-                    {item.status? <FontAwesomeIcon icon={faCheck} /> : ""}
-                  </p>
-                </div>
-              )}
-               {editingId === item.id ? (
-                <>
-                  <EditInput
-                    value={editValue}
-                    onChange={(e) => setEditValue(e.target.value)}
-                    type="text"
-                  />
-                  <ButtonGroup>
-                    <button className="todo-savebtn" onClick={()=>saveEdit(item.id)}>
-                      <FontAwesomeIcon icon={faCheck} />
-                    </button>
-                    <button className="todo-cancelbtn" onClick={cancelEdit}>
-                      <FontAwesomeIcon icon={faXmark} />
-                    </button>
-                  </ButtonGroup>
-                </>
-                ) : (
-                <>
-                  {/* <div className="todo-content">{item.content}</div> */}
-                  <TodoText $status={item.status}>{item.content}</TodoText>
-                  <ButtonGroup>
-                    {!item.status &&(
-                      <button className="todo-editbtn" onClick={() => startEditing(item.id, item.content)}>
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                      </button>
+        {todoItems.length === 0 ? ( <EmptyContent />):(
+          <>
+            <FilterContent>
+              <FilterButton $active={filter === "all"} onClick={() => handleFilterChange("all")}>
+                全部
+              </FilterButton>
+              <FilterButton $active={filter === "active"} onClick={() => handleFilterChange("active")}>
+                未完成
+              </FilterButton>
+              <FilterButton $active={filter === "completed"} onClick={() => handleFilterChange("completed")}>
+                已完成
+              </FilterButton>
+            </FilterContent>
+            <TodoContent>
+              {filterTodoItems.map((item) => (
+                <TodoItem key={item.id}>
+                  {editingId !== item.id && (
+                    <div className="todo-checkbox" onClick={() => handleCheckboxStatus(item.id)}>
+                      <p>
+                        {item.status? <FontAwesomeIcon icon={faCheck} /> : ""}
+                      </p>
+                    </div>
+                  )}
+                    {editingId === item.id ? (
+                    <>
+                      <EditInput
+                        value={editValue}
+                        onChange={(e) => setEditValue(e.target.value)}
+                        type="text"
+                      />
+                      <ButtonGroup>
+                        <button className="todo-savebtn" onClick={()=>saveEdit(item.id)}>
+                          <FontAwesomeIcon icon={faCheck} />
+                        </button>
+                        <button className="todo-cancelbtn" onClick={cancelEdit}>
+                          <FontAwesomeIcon icon={faXmark} />
+                        </button>
+                      </ButtonGroup>
+                    </>
+                    ) : (
+                    <>
+                      <TodoText $status={item.status}>{item.content}</TodoText>
+                      <ButtonGroup>
+                        {!item.status &&(
+                          <button className="todo-editbtn" onClick={() => startEditing(item.id, item.content)}>
+                            <FontAwesomeIcon icon={faPenToSquare} />
+                          </button>
+                        )}
+                        <button className="todo-delbtn" onClick={()=>handleDelTodoItem(item.id)}>
+                          <FontAwesomeIcon icon={faTrash} />
+                        </button> 
+                      </ButtonGroup>
+                    </>
                     )}
-                    <button className="todo-delbtn" onClick={()=>handleDelTodoItem(item.id)}>
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button> 
-                  </ButtonGroup>
-                </>
-                )}
-            </TodoItem>
-          ))}
-        </TodoContent>
+                </TodoItem>
+              ))}
+            </TodoContent>
+          </>
+        )}
       </Container>
     </>
   )
