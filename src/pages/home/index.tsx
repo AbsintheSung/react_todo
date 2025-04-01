@@ -39,17 +39,6 @@ const FilterContent = styled.div`
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
-  /* & > .filter-Btn{
-    flex:1;
-    padding: 8px 16px;
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    &:hover {
-      color: #FFD370;
-      border-bottom: 1px solid #000000;
-    }
-  } */
 `
 const FilterButton =  styled.button<{ $active: boolean }>`
   flex:1;
@@ -86,23 +75,6 @@ const TodoItem = styled.li`
       justify-content: center;
     }
   }
-  /* & >.todo-content{
-    flex: 1;
-  } */
-  
-  /* & > .todo-delbtn{
-    background: none;
-    padding: 0px;
-    border: none;
-    color: #ff5252;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    &:hover {
-      color: #ff0000;
-    }
-  } */
   `
 const TodoText = styled.p<{ $status: boolean }>`
   flex: 1;
@@ -207,12 +179,6 @@ const Home = ()=>{
 
   //添加新項目
   const addTodoItem = async () => {
-    // const newTodo: TodoItem = {
-    //   content: inputValue,
-    //   createTime:  Date.now(),
-    //   id:  Date.now().toString(),
-    //   status: false,
-    // }
     const todoItem:TodoItemContent = {
       content:inputValue
     } 
@@ -244,7 +210,6 @@ const Home = ()=>{
     }else{
       console.log('刪除失敗')
     }
-    // setTodoItems(todoItems.filter((item) => item.id !==id));
   }
 
   // 開啟編輯項目
@@ -270,11 +235,6 @@ const Home = ()=>{
     setEditingId(null)
     setEditValue("")
     console.log(response)
-    // if (editingId !== null && editValue.trim() !== "") {
-    //   setTodoItems(todoItems.map((item) => (item.id === editingId ? { ...item, content: editValue } : item)))
-    //   setEditingId(null)
-    //   setEditValue("")
-    // }
   }
 
   // 取消编辑
@@ -283,35 +243,6 @@ const Home = ()=>{
     setEditValue("")
   } 
 
-
-  // useEffect(() => {
-  //   const responseData: TodoItem[] = [
-  //     {
-  //       content: "買晚餐",
-  //       createTime: 1743340055,
-  //       id: "-OMb9XcMmDop98NqTNjM",
-  //       status: false
-  //     },
-  //     {
-  //       content: "買早餐",
-  //       createTime: 1743340055,
-  //       id: "-OMb9XcMmDop98NqTNjk",
-  //       status: false
-  //     },
-  //     {
-  //       content: "買午餐",
-  //       createTime: 1743340055,
-  //       id: "-OMb9XcMmDop98NqTNj",
-  //       status: false
-  //     }
-  //   ];
-  //   setTodoItems(responseData);
-  // }, []); 
-
-  // // 監聽狀態
-  // useEffect(() => {
-  //   console.log("todoItems 更新後:", todoItems);
-  // }, [todoItems]); 
   return(
     <>
       <Container>
@@ -336,13 +267,6 @@ const Home = ()=>{
           </FilterButton>
         </FilterContent>
         <TodoContent>
-          {/* <TodoItem>
-            <div className="todo-checkbox">
-              <p></p>
-            </div>
-            <div className="todo-content">內容內容內容內容內容</div>
-            <button className="todo-delbtn">刪除按鈕</button>
-          </TodoItem> */}
           {filterTodoItems.map((item) => (
             <TodoItem key={item.id}>
               {editingId !== item.id && (
@@ -352,10 +276,6 @@ const Home = ()=>{
                   </p>
                 </div>
               )}
-              {/* <div className="todo-content">{item.content}</div>
-              <button className="todo-delbtn" onClick={()=>handleDelTodoItem(item.id)}>
-                <FontAwesomeIcon icon={faTrash} />
-              </button> */}
                {editingId === item.id ? (
                 <>
                   <input
@@ -382,9 +302,6 @@ const Home = ()=>{
                         <FontAwesomeIcon icon={faPenToSquare} />
                       </button>
                     )}
-                     {/* <button className="todo-editbtn" onClick={() => startEditing(item.id, item.content)}>
-                      <FontAwesomeIcon icon={faPenToSquare} />
-                    </button> */}
                     <button className="todo-delbtn" onClick={()=>handleDelTodoItem(item.id)}>
                       <FontAwesomeIcon icon={faTrash} />
                     </button> 

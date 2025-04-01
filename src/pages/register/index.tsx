@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import  {z , ZodType} from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerUser, type RegisterRequest,type RegisterError } from "../../utils/api/auth/authRegister"
+import { registerUser, } from "../../utils/api/auth/authRegister"
+import { RegisterRequest,ApiError } from "../../types/auth";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
@@ -62,21 +63,10 @@ const Register = () =>{
       showToast("註冊成功，請登入！", "success")
       navigate('/login')
     }else{
-      const error =response as RegisterError
+      const error =response as ApiError
       showToast(`${error.message}`, "error")
     }
-    // try {
-    //   const response = await registerUser(formData)
-    //   console.log('response',response)
-    //   if(response?.data?.status){
-    //     console.log('跳轉')
-    //     showToast("註冊成功，請登入！", "success");
-    //     navigate('/login')
-    //   }
-    // } catch (error) {
-    //   const errorMessage = (error as { error: string })?.error;
-    //   showToast(`${errorMessage}`, "error");
-    // }
+
     reset({
       email:"" ,
       name: "",
