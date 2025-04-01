@@ -1,5 +1,5 @@
 import { Container } from "../../styles/container";
-import { LoginContent, FormLogin } from "../../styles/login";
+import { LoginContent, FormLogin,RegistError } from "../../styles/login";
 import { Link } from "react-router-dom";
 import  {z , ZodType} from 'zod'
 import { useForm } from 'react-hook-form'
@@ -42,6 +42,7 @@ function Login() {
     console.log('errors',errors)
   return (
     <>
+    <main className="login-main">
       <Container onSubmit={handleSubmit(onSubmit)}>
         <LoginContent>
             <h2>線上代辦事項服務</h2>
@@ -49,20 +50,26 @@ function Login() {
               <div>
                 <label>Email</label>
                 <input type="email" {...login('email')} ></input>
-                <p className="register-error">{errors.email?.message? errors.email.message :''}</p>
+                <RegistError $isVisible={!!errors.email?.message}>
+                  <span>{errors.email?.message || ""}</span>
+                </RegistError>
               </div>
               <div>
                 <label>密碼</label>
                 <input type="password" {...login('password')}></input>
-                <p className="register-error">{errors.password?.message? errors.password.message :''}</p>
+                <RegistError $isVisible={!!errors.password?.message}>
+                  <span>{errors.password?.message || ""}</span>
+                </RegistError>
               </div>
-              <div>
-                <button>登入</button>
-                <Link to="../register">連結到註冊</Link>
+              <div className="login-btn-group">
+                <button className="login-btn">登入</button>
+                <Link className="login-link" to="../register">註冊帳號</Link>
               </div>
             </FormLogin>
         </LoginContent>
       </Container>
+    </main>
+      
     </>
   )
 }
