@@ -1,24 +1,9 @@
 import Cookies from "js-cookie";
-export type TodoItem = {
-  id: string;
-  createTime: number;
-  content: string;
-  status: boolean;
-};
-
-export type TodoListSuccessResponse = {
-  status: true;
-  data: TodoItem[];
-};
-
-export type TodoListErrorResponse = {
-  status: false;
-  message: string;
-};
-
-
-export type TodoListResponse = TodoListSuccessResponse | TodoListErrorResponse;
-
+import {
+  TodoListSuccessResponse,
+  TodoListErrorResponse,
+  TodoListResponse
+} from "../../../types/list";
 
 export const getTodoList = async (): Promise<TodoListResponse> => {
   try {
@@ -38,7 +23,7 @@ export const getTodoList = async (): Promise<TodoListResponse> => {
       return responseData as TodoListSuccessResponse;
     }
 
-    
+
     switch (response.status) {
       case 400:
         throw { status: false, message: responseData.message || "取得失敗" };

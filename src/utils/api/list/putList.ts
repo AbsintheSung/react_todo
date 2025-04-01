@@ -1,20 +1,10 @@
 import Cookies from "js-cookie";
-
-export type TodoContent = {
-  content: string;
-};
-
-export type PutSuccessResponse = {
-  status: true;
-  message: string;
-};
-
-export type PutErrorResponse = {
-  status: false;
-  message: string;
-};
-
-export type PutResponse = PutSuccessResponse | PutErrorResponse;
+import {
+  TodoContent,
+  PutSuccessResponse,
+  PutErrorResponse,
+  PutResponse,
+} from "../../../types/list";
 
 export const putTodoList = async (id: string, todoData: TodoContent): Promise<PutResponse> => {
   try {

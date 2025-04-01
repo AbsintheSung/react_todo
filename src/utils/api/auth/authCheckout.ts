@@ -1,15 +1,9 @@
 import Cookies from 'js-cookie';
-export type CheckoutSuccessResponse = {
-  status: true;
-  uid: string;
-};
-
-export type CheckoutErrorResponse = {
-  status: false;
-  message: string;
-};
-
-export type CheckoutResponse = CheckoutSuccessResponse | CheckoutErrorResponse;
+import {
+  CheckoutSuccessResponse,
+  CheckoutErrorResponse,
+  CheckoutResponse,
+} from '../../../types/auth';
 
 export const checkoutUser = async (): Promise<CheckoutResponse> => {
   try {
