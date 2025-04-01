@@ -6,6 +6,7 @@ import { faCheck,faTrash,faPenToSquare,faXmark } from "@fortawesome/free-solid-s
 import { getTodoList } from "../../utils/api/list/getList";
 import { postTodoList } from "../../utils/api/list/postList";
 import { putTodoList } from "../../utils/api/list/putList";
+import { deleteTodo } from "../../utils/api/list/delItemList";
 
 const InputContent = styled.div`
   display: flex;
@@ -218,8 +219,19 @@ const Home = ()=>{
   }
 
   // 刪除項目
-  const handleDelTodoItem = (id: string) => {
-    setTodoItems(todoItems.filter((item) => item.id !==id));
+  const handleDelTodoItem = async (id: string) => {
+    /*後端只回傳 刪除成功
+      1. 可以直接透過 filter 方式，更新整個資料。
+      2.也可以在這邊在發送一個獲取資料的請求，確保資料正確。
+      看人使用
+    */
+    const response = await deleteTodo(id)
+    if(response.status){
+      setTodoItems(todoItems.filter((item) => item.id !==id));
+    }else{
+      console.log('刪除失敗')
+    }
+    // setTodoItems(todoItems.filter((item) => item.id !==id));
   }
 
   // 開啟編輯項目
