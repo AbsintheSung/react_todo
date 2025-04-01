@@ -38,7 +38,7 @@ export const getTodoList = async (): Promise<TodoListResponse> => {
       return responseData as TodoListSuccessResponse;
     }
 
-    // 依照不同的 HTTP 状态码处理错误
+    
     switch (response.status) {
       case 400:
         throw { status: false, message: responseData.message || "取得失敗" };

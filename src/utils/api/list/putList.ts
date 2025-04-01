@@ -18,7 +18,7 @@ export type PutResponse = PutSuccessResponse | PutErrorResponse;
 
 export const updateTodo = async (id: string, todoData: TodoContent): Promise<PutResponse> => {
   try {
-    // 从 localStorage 或 cookie 获取 token
+  
     const token = Cookies.get('token');
     const response = await fetch(`https://todolist-api.hexschool.io/todos/${id}`, {
       method: "PUT",
@@ -36,7 +36,7 @@ export const updateTodo = async (id: string, todoData: TodoContent): Promise<Put
       return responseData as PutSuccessResponse;
     }
 
-    // 依照不同的 HTTP 状态码处理错误
+   
     switch (response.status) {
       case 400:
         throw { status: false, message: responseData.message || "更新失敗" };

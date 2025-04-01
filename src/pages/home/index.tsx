@@ -153,9 +153,11 @@ const Home = ()=>{
   const fetchTodos = async () => {
     const response = await getTodoList();
     if(response.status){
-      console.log('獲取成功')
+      console.log('獲取成功',response.data)
+      setTodoItems([...response.data])
     }else{
       console.log('獲取失敗')
+      setTodoItems([])
     }
   }
   useEffect(() => {
@@ -224,34 +226,34 @@ const Home = ()=>{
   } 
 
 
-  useEffect(() => {
-    const responseData: TodoItem[] = [
-      {
-        content: "買晚餐",
-        createTime: 1743340055,
-        id: "-OMb9XcMmDop98NqTNjM",
-        status: false
-      },
-      {
-        content: "買早餐",
-        createTime: 1743340055,
-        id: "-OMb9XcMmDop98NqTNjk",
-        status: false
-      },
-      {
-        content: "買午餐",
-        createTime: 1743340055,
-        id: "-OMb9XcMmDop98NqTNj",
-        status: false
-      }
-    ];
-    setTodoItems(responseData);
-  }, []); 
+  // useEffect(() => {
+  //   const responseData: TodoItem[] = [
+  //     {
+  //       content: "買晚餐",
+  //       createTime: 1743340055,
+  //       id: "-OMb9XcMmDop98NqTNjM",
+  //       status: false
+  //     },
+  //     {
+  //       content: "買早餐",
+  //       createTime: 1743340055,
+  //       id: "-OMb9XcMmDop98NqTNjk",
+  //       status: false
+  //     },
+  //     {
+  //       content: "買午餐",
+  //       createTime: 1743340055,
+  //       id: "-OMb9XcMmDop98NqTNj",
+  //       status: false
+  //     }
+  //   ];
+  //   setTodoItems(responseData);
+  // }, []); 
 
-  // 監聽狀態
-  useEffect(() => {
-    console.log("todoItems 更新後:", todoItems);
-  }, [todoItems]); 
+  // // 監聽狀態
+  // useEffect(() => {
+  //   console.log("todoItems 更新後:", todoItems);
+  // }, [todoItems]); 
   return(
     <>
       <Container>
