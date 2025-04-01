@@ -1,22 +1,11 @@
 import Cookies from 'js-cookie';
-export type LoginRequest = {
-  email: string;
-  password: string;
-};
-
-export type LoginResponse = {
-  status: true;
-  exp: number;
-  token: string;
-  nickname: string;
-};
-
-export type ApiError = {
-  status: false;
-  message: string;
-};
-export type ApiResponse = LoginResponse | ApiError;
-export const loginUser = async (userData: LoginRequest): Promise<ApiResponse> => {
+import {
+  LoginRequest,
+  LoginResponse,
+  LoginApiResponse,
+  ApiError
+} from '../../../types/auth';
+export const loginUser = async (userData: LoginRequest): Promise<LoginApiResponse> => {
   try {
     const response = await fetch(`https://todolist-api.hexschool.io/users/sign_in`, {
       method: "POST",

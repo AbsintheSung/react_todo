@@ -1,19 +1,10 @@
-export type RegisterRequest = {
-  email: string
-  password: string
-  nickname: string
-}
-export type RegisterResponse = {
-  status: boolean
-  uid: string
-}
-export type RegisterError = {
-  status: false
-  message: string
-};
-export type ApiResponse = RegisterResponse | RegisterError;
-
-export const registerUser = async (userData: RegisterRequest): Promise<ApiResponse> => {
+import {
+  ApiError,
+  RegisterRequest,
+  RegisterResponse,
+  RegisterApiResponse
+} from "../../../types/auth"
+export const registerUser = async (userData: RegisterRequest): Promise<RegisterApiResponse> => {
   try {
     const response = await fetch(`https://todolist-api.hexschool.io/users/sign_up`, {
       method: "POST",
@@ -39,6 +30,6 @@ export const registerUser = async (userData: RegisterRequest): Promise<ApiRespon
     }
   } catch (error) {
     console.error("註冊錯誤:", error);
-    return error as RegisterError;
+    return error as ApiError;
   }
 };
