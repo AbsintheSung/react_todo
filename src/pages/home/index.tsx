@@ -4,6 +4,7 @@ import { useState,useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck,faTrash,faPenToSquare,faXmark } from "@fortawesome/free-solid-svg-icons";
 import { getTodoList } from "../../utils/api/list/getList";
+import { postTodoList } from "../../utils/api/list/postList";
 
 const InputContent = styled.div`
   display: flex;
@@ -142,6 +143,9 @@ type TodoItem = {
   status: boolean;
 }
 type FilterType = "all" | "active" | "completed"
+type TodoItemContent = {
+  content:string
+}
 
 const Home = ()=>{
   const [inputValue, setInputValue] = useState("")
@@ -187,14 +191,28 @@ const Home = ()=>{
   }
 
   //添加新項目
-  const addTodoItem = () => {
-    const newTodo: TodoItem = {
-      content: inputValue,
-      createTime:  Date.now(),
-      id:  Date.now().toString(),
-      status: false,
+  const addTodoItem = async () => {
+    // const newTodo: TodoItem = {
+    //   content: inputValue,
+    //   createTime:  Date.now(),
+    //   id:  Date.now().toString(),
+    //   status: false,
+    // }
+    const todoItem:TodoItemContent = {
+      content:inputValue
+    } 
+    const response = await postTodoList(todoItem)
+    if(response.status){
+      /*後端回傳新增的單一項目
+        1. 可以直接解構後，再添加新的單一資料進去，這樣可以不用再發送獲取資料的請求。
+        2.也可以在這邊在發送一個獲取資料的請求，確保資料正確。
+        看人使用
+      */
+      setTodoItems([...todoItems, response.newTodo])
+    }else{
+      console.log('新增失敗')
     }
-    setTodoItems([...todoItems, newTodo])
+    console.log(response)
     setInputValue("")
   }
 

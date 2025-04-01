@@ -5,6 +5,9 @@ export type TodoItem = {
   content: string;
   status: boolean;
 };
+export type ItemContent = {
+  content: string
+}
 export type AddTodoSuccessResponse = {
   status: true;
   newTodo: TodoItem;
@@ -18,7 +21,7 @@ export type AddTodoErrorResponse = {
 
 export type AddTodoResponse = AddTodoSuccessResponse | AddTodoErrorResponse;
 
-export const addTodo = async (content: string): Promise<AddTodoResponse> => {
+export const postTodoList = async (content: ItemContent): Promise<AddTodoResponse> => {
   try {
 
     const token = localStorage.getItem('token') || Cookies.get('token');
@@ -28,7 +31,7 @@ export const addTodo = async (content: string): Promise<AddTodoResponse> => {
         "Authorization": `${token}`,
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ content })
+      body: JSON.stringify({ ...content })
     });
 
     const responseData = await response.json();
