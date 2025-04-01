@@ -4,6 +4,10 @@ import { useState,useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck,faTrash,faPenToSquare,faXmark } from "@fortawesome/free-solid-svg-icons";
 import { getTodoList } from "../../utils/api/list/getList";
+import { postTodoList } from "../../utils/api/list/postList";
+import { putTodoList } from "../../utils/api/list/putList";
+import { deleteTodo } from "../../utils/api/list/delItemList";
+import { patchTodoList } from '../../utils/api/list/patchList'
 
 const InputContent = styled.div`
   display: flex;
@@ -142,6 +146,9 @@ type TodoItem = {
   status: boolean;
 }
 type FilterType = "all" | "active" | "completed"
+type TodoItemContent = {
+  content:string
+}
 
 const Home = ()=>{
   const [inputValue, setInputValue] = useState("")
@@ -153,9 +160,11 @@ const Home = ()=>{
   const fetchTodos = async () => {
     const response = await getTodoList();
     if(response.status){
-      console.log('獲取成功')
+      console.log('獲取成功',response.data)
+      setTodoItems([...response.data])
     }else{
       console.log('獲取失敗')
+      setTodoItems([])
     }
   }
   useEffect(() => {
@@ -174,47 +183,98 @@ const Home = ()=>{
     return true
   })
 
-  // 完成/未完成 邏輯 
-  const handleCheckboxStatus = (id: string) => {
-    setTodoItems(todoItems.map((item) => {
-      if (item.id === id) {
-        return { ...item, status: !item.status };
-      }
-      return item;
-    }));
+  // 完成/未完成 狀態更新
+  const handleCheckboxStatus = async (id: string) => {
+    /*後端回傳 更新成功
+      1. 使用 map 處理後，更新列表。
+      2.也可以在這邊在發送一個獲取資料的請求，確保資料正確。
+      看人使用
+    */
+    const response  = await patchTodoList(id)
+    console.log(response)
+    if(response.status){
+      setTodoItems(todoItems.map((item) => {
+        if (item.id === id) {
+          return { ...item, status: !item.status };
+        }
+        return item;
+      }));
+    }else{
+      console.log('狀態更新失敗')
+    }
+
   }
 
   //添加新項目
-  const addTodoItem = () => {
-    const newTodo: TodoItem = {
-      content: inputValue,
-      createTime:  Date.now(),
-      id:  Date.now().toString(),
-      status: false,
+  const addTodoItem = async () => {
+    // const newTodo: TodoItem = {
+    //   content: inputValue,
+    //   createTime:  Date.now(),
+    //   id:  Date.now().toString(),
+    //   status: false,
+    // }
+    const todoItem:TodoItemContent = {
+      content:inputValue
+    } 
+    const response = await postTodoList(todoItem)
+    if(response.status){
+      /*後端回傳新增的單一項目
+        1. 可以直接解構後，再添加新的單一資料進去，這樣可以不用再發送獲取資料的請求。
+        2.也可以在這邊在發送一個獲取資料的請求，確保資料正確。
+        看人使用
+      */
+      setTodoItems([...todoItems, response.newTodo])
+    }else{
+      console.log('新增失敗')
     }
-    setTodoItems([...todoItems, newTodo])
+    console.log(response)
     setInputValue("")
   }
 
   // 刪除項目
-  const handleDelTodoItem = (id: string) => {
-    setTodoItems(todoItems.filter((item) => item.id !==id));
+  const handleDelTodoItem = async (id: string) => {
+    /*後端只回傳 刪除成功
+      1. 可以直接透過 filter 方式，更新整個資料。
+      2.也可以在這邊在發送一個獲取資料的請求，確保資料正確。
+      看人使用
+    */
+    const response = await deleteTodo(id)
+    if(response.status){
+      setTodoItems(todoItems.filter((item) => item.id !==id));
+    }else{
+      console.log('刪除失敗')
+    }
+    // setTodoItems(todoItems.filter((item) => item.id !==id));
   }
 
-  // 編輯項目
+  // 開啟編輯項目
   const startEditing = (id: string, text: string) => {
     setEditingId(id)
     console.log(text)
     setEditValue(text)
   }
 
-  // 保存编辑
-  const saveEdit = () => {
-    if (editingId !== null && editValue.trim() !== "") {
+  // 確認编辑
+  const saveEdit = async (id:string) => {
+    /*後端只回傳 更新成功
+      1. 可以直接透過 map 方式，更新整個資料。
+      2.也可以在這邊在發送一個獲取資料的請求，確保資料正確。
+      看人使用
+    */
+    const response = await putTodoList(id,{ content : editValue } )
+    if(response.status){
       setTodoItems(todoItems.map((item) => (item.id === editingId ? { ...item, content: editValue } : item)))
-      setEditingId(null)
-      setEditValue("")
+    }else{
+      console.log(response.message)
     }
+    setEditingId(null)
+    setEditValue("")
+    console.log(response)
+    // if (editingId !== null && editValue.trim() !== "") {
+    //   setTodoItems(todoItems.map((item) => (item.id === editingId ? { ...item, content: editValue } : item)))
+    //   setEditingId(null)
+    //   setEditValue("")
+    // }
   }
 
   // 取消编辑
@@ -224,34 +284,34 @@ const Home = ()=>{
   } 
 
 
-  useEffect(() => {
-    const responseData: TodoItem[] = [
-      {
-        content: "買晚餐",
-        createTime: 1743340055,
-        id: "-OMb9XcMmDop98NqTNjM",
-        status: false
-      },
-      {
-        content: "買早餐",
-        createTime: 1743340055,
-        id: "-OMb9XcMmDop98NqTNjk",
-        status: false
-      },
-      {
-        content: "買午餐",
-        createTime: 1743340055,
-        id: "-OMb9XcMmDop98NqTNj",
-        status: false
-      }
-    ];
-    setTodoItems(responseData);
-  }, []); 
+  // useEffect(() => {
+  //   const responseData: TodoItem[] = [
+  //     {
+  //       content: "買晚餐",
+  //       createTime: 1743340055,
+  //       id: "-OMb9XcMmDop98NqTNjM",
+  //       status: false
+  //     },
+  //     {
+  //       content: "買早餐",
+  //       createTime: 1743340055,
+  //       id: "-OMb9XcMmDop98NqTNjk",
+  //       status: false
+  //     },
+  //     {
+  //       content: "買午餐",
+  //       createTime: 1743340055,
+  //       id: "-OMb9XcMmDop98NqTNj",
+  //       status: false
+  //     }
+  //   ];
+  //   setTodoItems(responseData);
+  // }, []); 
 
-  // 監聽狀態
-  useEffect(() => {
-    console.log("todoItems 更新後:", todoItems);
-  }, [todoItems]); 
+  // // 監聽狀態
+  // useEffect(() => {
+  //   console.log("todoItems 更新後:", todoItems);
+  // }, [todoItems]); 
   return(
     <>
       <Container>
@@ -304,7 +364,7 @@ const Home = ()=>{
                     type="text"
                   />
                   <ButtonGroup>
-                    <button className="todo-savebtn" onClick={saveEdit}>
+                    <button className="todo-savebtn" onClick={()=>saveEdit(item.id)}>
                       <FontAwesomeIcon icon={faCheck} />
                     </button>
                     <button className="todo-cancelbtn" onClick={cancelEdit}>

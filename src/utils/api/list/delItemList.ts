@@ -30,7 +30,6 @@ export const deleteTodo = async (id: string): Promise<DelResponse> => {
       return responseData as DelSuccessResponse;
     }
 
-    // 依照不同的 HTTP 状态码处理错误
     switch (response.status) {
       case 400:
         throw { status: false, message: responseData.message || "刪除失敗" };
