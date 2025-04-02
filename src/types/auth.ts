@@ -35,6 +35,7 @@ export type RegisterResponse = {
 export type CheckoutSuccessResponse = {
   status: true;
   uid: string;
+  nickName: string;
 };
 
 export type CheckoutErrorResponse = {

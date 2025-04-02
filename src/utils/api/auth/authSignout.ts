@@ -19,6 +19,7 @@ export const signOutUser = async (): Promise<SignOutResponse> => {
 
     if (response.ok) {
       Cookies.remove("token");
+      Cookies.remove("nickName");
       return responseData as SignOutResponse;
     }
 

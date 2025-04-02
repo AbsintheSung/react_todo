@@ -21,7 +21,10 @@ export const checkoutUser = async (): Promise<CheckoutResponse> => {
     // console.log("解析的 responseData", responseData);
 
     if (response.ok) {
-      return responseData as CheckoutSuccessResponse;
+      const nickName = Cookies.get('nickname');
+      const newRes = { ...responseData, nickName }
+      console.log('newRes', newRes)
+      return newRes as CheckoutSuccessResponse;
     }
 
     switch (response.status) {
