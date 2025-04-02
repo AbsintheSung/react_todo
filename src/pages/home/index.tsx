@@ -24,7 +24,8 @@ import EmptyContent from '../../components/EmptyContent';
 import FilterButtons from './FilterButtons';
 import { ClipLoader } from "react-spinners";
 const Home = ()=>{
-  const [inputValue, setInputValue] = useState("")
+  const [inputValue, setInputValue] = useState<string>('')
+  const [nickName,setrNickname]=useState<string>('')
   const [todoItems,setTodoItems] = useState< TodoItems[] >([])
   const [filter, setFilter] = useState<FilterType>("all")
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -51,6 +52,8 @@ const Home = ()=>{
       const response = await checkoutUser();
       if (!response.status) {
         navigate("/login"); 
+      }else{
+        setrNickname(response.nickName)
       }
       // console.log('測試')
     };
@@ -184,7 +187,7 @@ const Home = ()=>{
   
   return(
     <>
-      <Header onSignOut={handleSignOut}/>
+      <Header username={nickName} onSignOut={handleSignOut}/>
      
       <Container>
         <InputContent>

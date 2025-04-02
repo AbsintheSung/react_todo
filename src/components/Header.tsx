@@ -16,7 +16,7 @@ export default function Header({ username = "使用者的代辦事項", onSignOu
       </LogoContainer>
 
       <NavList>
-        <li><p className="user-Info">{username}</p></li>
+        <li><p className="user-Info">{username}的代辦事項</p></li>
         <li> <button className="signout-btn" onClick={onSignOut}>登出</button></li>
       </NavList>
     </HeaderContainer>
