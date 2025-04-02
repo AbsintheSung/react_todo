@@ -1,54 +1,85 @@
-# React + TypeScript + Vite
+<h1 align="center">React-todoList</h1>
+<div align="center" >
+<a href="" >專案網址</a >
+</div>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 功能介紹
+    
+- 使用者可以 登入/註冊。
+- 使用者登入後，可以添加、修改、刪除代辦事項。
+- 此專案為針對並熟練 React 框架所做的。
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 專案使用
 
-## Expanding the ESLint configuration
+複製專案
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```bash
+  git clone 
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+進入專案
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+  cd 
 ```
+
+安裝套件
+
+```bash
+  npm install
+```
+
+啟動專案
+
+```bash
+  npm run dev
+```
+
+---
+
+## 資料夾結構 (Project Structure)
+- `src/` - 主要的 React 程式碼
+- `assets` - 主要放置 全局css樣式、圖片檔案
+- `components/` - UI 元件
+- `styles/` - style-components 的樣式設定
+- `types/` - TypeScript 型別定義
+- `page/` - 此專案有 登入、註冊、以及首頁，內部資料夾分別對應各router
+
+```
+.
+├── public/
+├── src/
+│   ├── components/
+│   ├── styles/
+│   ├── types/
+│   ├── pages/
+│   │   ├── home/
+│   │   ├── login/
+│   │   ├── register/
+│   ├── App.tsx
+│   ├── main.tsx
+│   ├── vite-env.d.ts
+├── .gitignore
+├── eslint.config.js
+├── index.html
+├── package-lock.json
+├── package.json
+├── README.md
+├── tsconfig.app.json
+├── tsconfig.json
+├── tsconfig.node.json
+├── vite.config.ts
+
+```
+
+
+---
+
+<h2 align="start">前端技術</h2>
+
+- **TypeScript**
+- **React.js**
+- **Vite.js**
+- **styled-components**
+- **Vercel (部署)**
