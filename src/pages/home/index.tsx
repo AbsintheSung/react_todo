@@ -132,12 +132,18 @@ const Home = ()=>{
       2.也可以在這邊在發送一個獲取資料的請求，確保資料正確。
       看人使用
     */
+    setLoadingItemId(id);
+    setLoadingAction("delete");
+    setOtherLoading(true)
     const response = await deleteTodo(id)
     if(response.status){
       setTodoItems(todoItems.filter((item) => item.id !==id));
     }else{
       // console.log('刪除失敗')
     }
+    setLoadingItemId(null);
+    setLoadingAction(null);
+    setOtherLoading(false)
   }
 
   // 開啟編輯項目
